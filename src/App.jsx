@@ -1,6 +1,7 @@
 import React from 'react';
 import { Segment, Header, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 
+import AboutModal from './AboutModal';
 import PrecinctsView from './PrecinctsView';
 import OfficersView from './OfficersView';
 
@@ -49,7 +50,7 @@ class App extends React.Component {
             NYPD Complaints
             <Header.Subheader>
               Visualizations of civilian complaints against New York City police officers, as released by ProPublica&nbsp;
-                <a href='https://projects.propublica.org/nypd-ccrb/' target='_blank' rel="noopener noreferrer"><Icon name='info circle' link aria-label='info' fitted /></a>
+              <AboutModal trigger={<Icon name='info circle' link aria-label='info' fitted />} />
             </Header.Subheader>
           </Header>
         </Segment>
