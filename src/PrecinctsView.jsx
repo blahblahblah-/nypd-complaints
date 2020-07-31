@@ -5,6 +5,7 @@ import { debounce } from 'lodash';
 import MapConfig from './MapConfig';
 import PrecinctData from './PrecinctData';
 import { minDate, maxDate } from './utils/searchTerms';
+import { toOrdinal } from './utils/ordinals.js'
 
 import './PrecinctsView.scss';
 
@@ -124,6 +125,11 @@ class PrecinctsView extends React.Component {
             );
           }
         });
+
+        const popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false
+        });
          
         // When the mouse leaves the state-fill layer, update the feature state of the
         // previously hovered feature.
@@ -136,9 +142,36 @@ class PrecinctsView extends React.Component {
             );
           }
           this.hoveredStateId = null;
+          popup.remove();
         });
-        this.map.on('mouseenter', 'data', (() => {
+
+        this.map.on('mouseenter', 'data', ((e) => {
           this.map.getCanvas().style.cursor = 'pointer';
+
+          const coordinates = e.lngLat;
+          const description = this.generatePopup(e.features[0].properties.precinct);
+
+          // Ensure that if the map is zoomed out such that multiple
+          // copies of the feature are visible, the popup appears
+          // over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          // Populate the popup and set its coordinates
+          // based on the feature found.
+          popup
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(this.map);
+        }).bind(this));
+
+        this.map.on('mousemove', 'data', ((e) => {
+          const coordinates = e.lngLat;
+          const description = this.generatePopup(e.features[0].properties.precinct);
+          popup
+            .setLngLat(coordinates)
+            .setHTML(description);
         }).bind(this));
 
         this.map.on('click', 'data', e => {
@@ -151,6 +184,18 @@ class PrecinctsView extends React.Component {
 
         this.refreshMap();
       })
+  }
+
+  generatePopup(precinct) {
+    const { precinctsData } = this.state;
+    const data = precinctsData[precinct];
+
+    return `<h5>${toOrdinal(precinct)} Precinct</h5>
+      <ul>
+        <li>Officers with Complaints: ${data.officers.length}</li>
+        <li>Complaints: ${data.complaints.size}</li>
+        <li>Allegations: ${data.allegations.size}</li>
+      </ul>`;
   }
 
   refreshMap() {
@@ -312,6 +357,20 @@ class PrecinctsView extends React.Component {
     this.setState({ [name]: value }, this.refreshMap);
   };
 
+  handleReset = () => {
+    this.setState({
+      fromDate: minDate,
+      toDate: maxDate,
+      categories: [],
+      complainant_ethnicity: [],
+      complainant_gender: [],
+      complainant_age_incident: [],
+      mos_ethnicity: [],
+      mos_gender: [],
+      board_disposition: [],
+    }, this.refreshMap);
+  };
+
   render() {
     const {
       mode, fromDate, toDate, categories, selectedPrecinct, precinctsData,
@@ -324,10 +383,13 @@ class PrecinctsView extends React.Component {
         </div>
         { !selectedPrecinct &&
           <MapConfig mode={mode} fromDate={fromDate} toDate={toDate} selectedCategories={categories}
+            complainant_ethnicity={complainant_ethnicity} complainant_gender={complainant_gender}
+            complainant_age_incident={complainant_age_incident} mos_ethnicity={mos_ethnicity}
+            mos_gender={mos_gender} board_disposition={board_disposition}
             allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
             handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}
             handleCategoryFilterChange={this.handleCategoryFilterChange} handleFilterChange={this.handleFilterChange}
-            handleModeClick={this.handleModeClick}
+            handleModeClick={this.handleModeClick} handleReset={this.handleReset}
           />
         }
         { selectedPrecinct &&

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Form, Menu, Dropdown } from 'semantic-ui-react';
+import { Segment, Form, Menu, Dropdown, Button } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
 import { minDate, maxDate, categories, ethnicities, genders, officerGenders, ageGroups, conclusions } from './utils/searchTerms';
@@ -61,8 +61,10 @@ class MapConfig extends React.Component {
   }
 
   render() {
-    const { mode, fromDate, toDate, selectedCategories, allegationsCount, complaintsCount, officersCount,
-      handleFromDateChange, handleToDateChange, handleModeClick, handleCategoryFilterChange, handleFilterChange } = this.props;
+    const { mode, fromDate, toDate,
+      selectedCategories, complainant_ethnicity, complainant_gender, complainant_age_incident, mos_ethnicity, mos_gender, board_disposition,
+      allegationsCount, complaintsCount, officersCount,
+      handleFromDateChange, handleToDateChange, handleModeClick, handleCategoryFilterChange, handleFilterChange, handleReset } = this.props;
 
     return (
       <Segment inverted className='map-config'>
@@ -78,7 +80,6 @@ class MapConfig extends React.Component {
           <Form.Group widths='equal'>
             <Form.Field>
               <DatePicker
-                // className={className}
                 name='fromYear'
                 minDate={minDate}
                 maxDate={maxDate}
@@ -95,7 +96,6 @@ class MapConfig extends React.Component {
             </Form.Field>
             <Form.Field>
               <DatePicker
-                // className={className}
                 name='toYear'
                 minDate={minDate}
                 maxDate={maxDate}
@@ -131,6 +131,7 @@ class MapConfig extends React.Component {
               selection
               options={this.options(ethnicities)}
               onChange={handleFilterChange}
+              value={complainant_ethnicity}
             />
           </Form.Field>
           <Form.Field>
@@ -143,6 +144,7 @@ class MapConfig extends React.Component {
               selection
               options={this.options(genders)}
               onChange={handleFilterChange}
+              value={complainant_gender}
             />
           </Form.Field>
           <Form.Field>
@@ -155,6 +157,7 @@ class MapConfig extends React.Component {
               selection
               options={this.ageGroupOptions()}
               onChange={handleFilterChange}
+              value={complainant_age_incident}
             />
           </Form.Field>
           <Form.Field>
@@ -167,6 +170,7 @@ class MapConfig extends React.Component {
               selection
               options={this.options(ethnicities)}
               onChange={handleFilterChange}
+              value={mos_ethnicity}
             />
           </Form.Field>
           <Form.Field>
@@ -179,6 +183,7 @@ class MapConfig extends React.Component {
               selection
               options={this.officerGenderOptions()}
               onChange={handleFilterChange}
+              value={mos_gender}
             />
           </Form.Field>
           <Form.Field>
@@ -191,7 +196,11 @@ class MapConfig extends React.Component {
               selection
               options={this.options(conclusions)}
               onChange={handleFilterChange}
+              value={board_disposition}
             />
+          </Form.Field>
+          <Form.Field>
+            <Button inverted onClick={handleReset}>Reset</Button>
           </Form.Field>
         </Form>
       </Segment>
