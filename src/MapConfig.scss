@@ -1,0 +1,38 @@
+.map-config {
+  position: relative !important;
+  top: 10px;
+  left: 10px;
+  bottom: auto;
+  width: 500px;
+  padding: 10px !important;
+  border-radius: 1rem !important;
+
+  @media only screen and (max-width: 767px) {
+    width: 90%;
+  }
+
+  .ui.menu {
+    margin-bottom: .5em;
+  }
+
+  .ui.form .fields {
+    margin: 0 -.5em .5em;
+
+    .field {
+      margin: 0;
+    }
+
+    .to h5 {
+      text-align: center;
+      line-height: 27px;
+    }
+  }
+
+  .ui.form .field {
+    margin: 0 0 .5em;
+
+    .react-datepicker-wrapper {
+      width: 100%;
+    }
+  }
+}
