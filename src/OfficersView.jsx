@@ -142,7 +142,7 @@ class OfficersView extends React.Component {
               {officer.first_name} {officer.last_name}
             </a>
           </Table.Cell>
-          <Table.Cell>{officer.shield_no !== 0 ? officer.shield_no : ''}</Table.Cell>
+          <Table.Cell>{officer.shield_no > 0 ? officer.shield_no : ''}</Table.Cell>
           <Table.Cell>{officer.command_now}</Table.Cell>
           <Table.Cell>{officer.rank_now}</Table.Cell>
           <Table.Cell>{officer.complaints.size}</Table.Cell>

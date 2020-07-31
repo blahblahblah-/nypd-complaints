@@ -49,7 +49,7 @@ class App extends React.Component {
           <Header as='h1' color='blue' inverted>
             NYPD Complaints
             <Header.Subheader>
-              Visualizations of civilian complaints against New York City police officers, as released by ProPublica&nbsp;
+              Visualization of civilian complaints against New York City police officers, as released by ProPublica&nbsp;
               <AboutModal trigger={<Icon name='info circle' link aria-label='info' fitted />} />
             </Header.Subheader>
           </Header>
