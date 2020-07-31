@@ -14,6 +14,16 @@
   .inner-box {
     max-height: 80vh;
     overflow-y: scroll;
+
+    .filters {
+      margin-top: .5em;
+
+      h5 {
+        margin-top: 0;
+        margin-bottom: .5em;
+      }
+
+    }
   }
 
   h3.ui.header {

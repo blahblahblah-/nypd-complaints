@@ -3,7 +3,6 @@ import { Segment, Header, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 
 import PrecinctsView from './PrecinctsView';
 import OfficersView from './OfficersView';
-import OverallView from './OverallView';
 
 import './App.scss';
 
@@ -37,11 +36,6 @@ class App extends React.Component {
           active={activeItem === 'officers'}
           onClick={this.handleItemClick}
          />
-        <Menu.Item
-          name='overall'
-          active={activeItem === 'overall'}
-          onClick={this.handleItemClick}
-        />
       </Menu>
     );
   }
@@ -72,10 +66,6 @@ class App extends React.Component {
         {
           activeItem === 'officers' &&
           <OfficersView isDataLoaded={isDataLoaded} data={data} />
-        }
-        {
-          activeItem === 'overall' &&
-          <OverallView isDataLoaded={isDataLoaded} data={data} />
         }
       </div>
     );

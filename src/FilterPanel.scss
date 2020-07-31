@@ -1,4 +1,4 @@
-.map-config {
+.filter-panel {
   position: relative !important;
   top: 10px;
   left: 10px;
@@ -7,8 +7,9 @@
   padding: 10px !important;
   border-radius: 1rem !important;
 
-  @media only screen and (max-width: 767px) {
-    width: 90%;
+  .summary h5 {
+    margin-top: 0;
+    margin-bottom: .5em;
   }
 
   .ui.menu {

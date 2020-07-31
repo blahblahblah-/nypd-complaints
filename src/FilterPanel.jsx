@@ -2,14 +2,15 @@ import React from 'react';
 import { Segment, Form, Menu, Dropdown, Button } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
-import { minDate, maxDate, categories, ethnicities, genders, officerGenders, ageGroups, conclusions } from './utils/searchTerms';
+import { minDate, maxDate, categories, ethnicities, genders, officerGenders, ageGroups, commands, ranks, conclusions } from './utils/searchTerms';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import './MapConfig.scss';
+import './FilterPanel.scss';
 
-class MapConfig extends React.Component {
+class FilterPanel extends React.Component {
   categoryOptions() {
-    const { selectedCategories } = this.props;
+    const { filters } = this.props;
+    const filteredCategories = filters.categories;
 
     return categories.flatMap((c) => {
       const primary = {
@@ -22,7 +23,7 @@ class MapConfig extends React.Component {
           'key': `${c.name}:${s}`,
           'text': `${c.name} - ${s}`,
           'value': `${c.name}:${s}`,
-          'disabled': selectedCategories.includes(c.name), // Disable if top-level is already selected
+          'disabled': filteredCategories?.includes(c.name), // Disable if top-level is already selected
         }
       });
       seconadary.unshift(primary);
@@ -50,6 +51,16 @@ class MapConfig extends React.Component {
     });
   }
 
+  commandOptions() {
+    return Object.keys(commands).map((v) => {
+      return {
+        'key': v,
+        'text': commands[v],
+        'value': v,
+      };
+    });
+  }
+
   options(values) {
     return values.map((v) => {
       return {
@@ -61,14 +72,17 @@ class MapConfig extends React.Component {
   }
 
   render() {
-    const { mode, fromDate, toDate,
-      selectedCategories, complainant_ethnicity, complainant_gender, complainant_age_incident, mos_ethnicity, mos_gender, board_disposition,
+    const {
+      mode, filters,
       allegationsCount, complaintsCount, officersCount,
-      handleFromDateChange, handleToDateChange, handleModeClick, handleCategoryFilterChange, handleFilterChange, handleReset } = this.props;
+      handleFromDateChange, handleToDateChange, handleModeClick, handleCategoryFilterChange, handleFilterChange, handleReset
+    } = this.props;
 
     return (
-      <Segment inverted className='map-config'>
+      <Segment inverted className='filter-panel'>
         <Form inverted size='mini'>
+        {
+          handleModeClick &&
           <Menu inverted fluid widths={3} size='mini'>
             <Menu.Item name='officers' content={`Officers with Complaints (${officersCount})`} active={mode === 'officers'}
               onClick={handleModeClick} />
@@ -77,13 +91,22 @@ class MapConfig extends React.Component {
             <Menu.Item name='allegations' content={`Allegations (${allegationsCount})`} active={mode === 'allegations'}
               onClick={handleModeClick} />
           </Menu>
+        }
+        {
+          !handleModeClick &&
+          <div className='summary'>
+            <h5>Officers with Complaints: {officersCount}</h5>
+            <h5>Complaints: {complaintsCount}</h5>
+            <h5>Allegations: {allegationsCount}</h5>
+          </div>
+        }
           <Form.Group widths='equal'>
             <Form.Field>
               <DatePicker
                 name='fromYear'
                 minDate={minDate}
                 maxDate={maxDate}
-                selected={fromDate}
+                selected={filters.fromDate}
                 onChange={handleFromDateChange}
                 selectsStart
                 showYearDropdown
@@ -99,7 +122,7 @@ class MapConfig extends React.Component {
                 name='toYear'
                 minDate={minDate}
                 maxDate={maxDate}
-                selected={toDate}
+                selected={filters.toDate}
                 onChange={handleToDateChange}
                 selectsEnd
                 showYearDropdown
@@ -118,7 +141,7 @@ class MapConfig extends React.Component {
               selection
               options={this.categoryOptions()}
               onChange={handleCategoryFilterChange}
-              value={selectedCategories}
+              value={filters.categories}
             />
           </Form.Field>
           <Form.Field>
@@ -127,11 +150,10 @@ class MapConfig extends React.Component {
               name='complainant_ethnicity'
               fluid
               multiple
-              search
               selection
               options={this.options(ethnicities)}
               onChange={handleFilterChange}
-              value={complainant_ethnicity}
+              value={filters.complainant_ethnicity}
             />
           </Form.Field>
           <Form.Field>
@@ -140,11 +162,10 @@ class MapConfig extends React.Component {
               name='complainant_gender'
               fluid
               multiple
-              search
               selection
               options={this.options(genders)}
               onChange={handleFilterChange}
-              value={complainant_gender}
+              value={filters.complainant_gender}
             />
           </Form.Field>
           <Form.Field>
@@ -153,11 +174,10 @@ class MapConfig extends React.Component {
               name='complainant_age_incident'
               fluid
               multiple
-              search
               selection
               options={this.ageGroupOptions()}
               onChange={handleFilterChange}
-              value={complainant_age_incident}
+              value={filters.complainant_age_incident}
             />
           </Form.Field>
           <Form.Field>
@@ -166,11 +186,10 @@ class MapConfig extends React.Component {
               name='mos_ethnicity'
               fluid
               multiple
-              search
               selection
               options={this.options(ethnicities)}
               onChange={handleFilterChange}
-              value={mos_ethnicity}
+              value={filters.mos_ethnicity}
             />
           </Form.Field>
           <Form.Field>
@@ -179,15 +198,75 @@ class MapConfig extends React.Component {
               name='mos_gender'
               fluid
               multiple
-              search
               selection
               options={this.officerGenderOptions()}
               onChange={handleFilterChange}
-              value={mos_gender}
+              value={filters.mos_gender}
             />
           </Form.Field>
+          {
+            filters.command_at_incident &&
+            <Form.Field>
+              <Dropdown
+                placeholder='Filter by Command at Incident'
+                name='command_at_incident'
+                fluid
+                multiple
+                search
+                selection
+                options={this.commandOptions()}
+                onChange={handleFilterChange}
+                value={filters.command_at_incident}
+              />
+            </Form.Field>
+          }
+          { filters.command_now &&
+            <Form.Field>
+              <Dropdown
+                placeholder='Filter by Current Command'
+                name='command_now'
+                fluid
+                multiple
+                search
+                selection
+                options={this.commandOptions()}
+                onChange={handleFilterChange}
+                value={filters.command_now}
+              />
+            </Form.Field>
+          }
+          { filters.rank_incident &&
+            <Form.Field>
+              <Dropdown
+                placeholder='Filter by Rank at Incident'
+                name='rank_incident'
+                fluid
+                multiple
+                search
+                selection
+                options={this.options(ranks)}
+                onChange={handleFilterChange}
+                value={filters.rank_incident}
+              />
+            </Form.Field>
+          }
+          { filters.rank_now &&
+            <Form.Field>
+              <Dropdown
+                placeholder='Filter by Current Rank'
+                name='rank_now'
+                fluid
+                multiple
+                search
+                selection
+                options={this.options(ranks)}
+                onChange={handleFilterChange}
+                value={filters.rank_now}
+              />
+            </Form.Field>
+          }
           <Form.Field>
-          <Dropdown
+            <Dropdown
               placeholder='Filter by CCRB conclusions'
               name='board_disposition'
               fluid
@@ -196,7 +275,7 @@ class MapConfig extends React.Component {
               selection
               options={this.options(conclusions)}
               onChange={handleFilterChange}
-              value={board_disposition}
+              value={filters.board_disposition}
             />
           </Form.Field>
           <Form.Field>
@@ -208,4 +287,4 @@ class MapConfig extends React.Component {
   }
 }
 
-export default MapConfig;
+export default FilterPanel;

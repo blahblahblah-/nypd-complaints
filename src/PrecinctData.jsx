@@ -20,7 +20,7 @@ class PrecinctData extends React.Component {
               {officer.first_name} {officer.last_name}
             </a>
           </Table.Cell>
-          <Table.Cell>{officer.shield_no != 0 ? officer.shield_no : ''}</Table.Cell>
+          <Table.Cell>{officer.shield_no !== 0 ? officer.shield_no : ''}</Table.Cell>
           <Table.Cell>{officer.command_now}</Table.Cell>
           <Table.Cell>{officer.rank_now}</Table.Cell>
           <Table.Cell>{officer.complaints.size} / { [...officer.complaints].filter(x => data.complaints.has(x)).length }</Table.Cell>
@@ -33,9 +33,13 @@ class PrecinctData extends React.Component {
   render() {
     const {
       selectedPrecinct, data,
-      fromDate, toDate,selectedCategories, complainant_ethnicity, complainant_gender, mos_ethnicity, mos_gender, complainant_age_incident, board_disposition,
+      filters,
       handleUnselectPrecinct,
     } = this.props;
+
+    const {
+      fromDate, toDate, categories, complainant_ethnicity, complainant_gender, mos_ethnicity, mos_gender, complainant_age_incident, board_disposition,
+    } = filters;
 
     return (
       <Segment inverted className='precinct-data'>
@@ -50,51 +54,53 @@ class PrecinctData extends React.Component {
               <Header as='h3'>{ toOrdinal(selectedPrecinct) } Precinct </Header>
             </Grid.Column>
           </Grid>
-          <Header as='h5'>
-            Period: {fromDate.getFullYear()}/{(fromDate.getMonth() + 1 + '').padStart(2, '0')} to {toDate.getFullYear()}/{(toDate.getMonth() + 1 + '').padStart(2, '0')}
-          </Header>
-          {
-            selectedCategories.length > 0 &&
+          <div className='filters'>
             <Header as='h5'>
-              Allegation type: { selectedCategories.map((c) => c.replace(':', ' - ')).join(', ') }
+              Period: {fromDate.getFullYear()}/{(fromDate.getMonth() + 1 + '').padStart(2, '0')} to {toDate.getFullYear()}/{(toDate.getMonth() + 1 + '').padStart(2, '0')}
             </Header>
-          }
-          {
-            complainant_ethnicity.length > 0 &&
-            <Header as='h5'>
-              Complainant ethnicity: { complainant_ethnicity.join(', ') }
-            </Header>
-          }
-          {
-            complainant_gender.length > 0 &&
-            <Header as='h5'>
-              Complainant gender: { complainant_gender.join(', ') }
-            </Header>
-          }
-          {
-            complainant_age_incident.length > 0 &&
-            <Header as='h5'>
-              Complainant age group: { complainant_age_incident.join(', ') }
-            </Header>
-          }
-          {
-            mos_ethnicity.length > 0 &&
-            <Header as='h5'>
-              Officer gender: { mos_ethnicity.join(', ') }
-            </Header>
-          }
-          {
-            mos_gender.length > 0 &&
-            <Header as='h5'>
-              Officer age group: { mos_gender.join(', ') }
-            </Header>
-          }
-          {
-            board_disposition.length > 0 &&
-            <Header as='h5'>
-              CCRB Conclusion: { board_disposition.join(', ') }
-            </Header>
-          }
+            {
+              categories.length > 0 &&
+              <Header as='h5'>
+                Allegation type: { categories.map((c) => c.replace(':', ' - ')).join(', ') }
+              </Header>
+            }
+            {
+              complainant_ethnicity.length > 0 &&
+              <Header as='h5'>
+                Complainant ethnicity: { complainant_ethnicity.join(', ') }
+              </Header>
+            }
+            {
+              complainant_gender.length > 0 &&
+              <Header as='h5'>
+                Complainant gender: { complainant_gender.join(', ') }
+              </Header>
+            }
+            {
+              complainant_age_incident.length > 0 &&
+              <Header as='h5'>
+                Complainant age group: { complainant_age_incident.join(', ') }
+              </Header>
+            }
+            {
+              mos_ethnicity.length > 0 &&
+              <Header as='h5'>
+                Officer gender: { mos_ethnicity.join(', ') }
+              </Header>
+            }
+            {
+              mos_gender.length > 0 &&
+              <Header as='h5'>
+                Officer age group: { mos_gender.join(', ') }
+              </Header>
+            }
+            {
+              board_disposition.length > 0 &&
+              <Header as='h5'>
+                CCRB Conclusion: { board_disposition.join(', ') }
+              </Header>
+            }
+          </div>
           <Statistic.Group widths={3} size='tiny'>
             <Statistic>
               <Statistic.Value>{ data.officers.length.toLocaleString('en-US') }</Statistic.Value>

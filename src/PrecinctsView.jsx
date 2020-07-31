@@ -2,10 +2,11 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { debounce } from 'lodash';
 
-import MapConfig from './MapConfig';
+import FilterPanel from './FilterPanel';
 import PrecinctData from './PrecinctData';
 import { minDate, maxDate } from './utils/searchTerms';
-import { toOrdinal } from './utils/ordinals.js'
+import { toOrdinal } from './utils/ordinals';
+import { filterData } from './utils/dataUtils';
 
 import './PrecinctsView.scss';
 
@@ -17,16 +18,18 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 class PrecinctsView extends React.Component {
   state = {
     isMapLoaded: false,
-    fromDate: minDate,
-    toDate: maxDate,
     mode: 'officers',
-    categories: [],
-    complainant_ethnicity: [],
-    complainant_gender: [],
-    complainant_age_incident: [],
-    mos_ethnicity: [],
-    mos_gender: [],
-    board_disposition: [],
+    filters: {
+      fromDate: minDate,
+      toDate: maxDate,
+      categories: [],
+      complainant_ethnicity: [],
+      complainant_gender: [],
+      complainant_age_incident: [],
+      mos_ethnicity: [],
+      mos_gender: [],
+      board_disposition: [],
+    },
     selectedPrecinct: null,
     precinctsData: {},
     allegationsCount: 0,
@@ -75,14 +78,11 @@ class PrecinctsView extends React.Component {
 
     import('./data/precincts.json')
       .then(data => {
-        const features = data.features.map((d) => {
+        data.features.forEach((d) => {
           d['id'] = d.properties.precinct;
           precincts.push(d.properties.precinct);
+          return d;
         })
-        const dataWithId = {
-          "type": "FeatureCollection",
-          "features": features,
-        };
         const geoJson = {
           "type": "geojson",
           "data": data
@@ -164,7 +164,7 @@ class PrecinctsView extends React.Component {
             .setLngLat(coordinates)
             .setHTML(description)
             .addTo(this.map);
-        }).bind(this));
+        }));
 
         this.map.on('mousemove', 'data', ((e) => {
           const coordinates = e.lngLat;
@@ -172,7 +172,7 @@ class PrecinctsView extends React.Component {
           popup
             .setLngLat(coordinates)
             .setHTML(description);
-        }).bind(this));
+        }));
 
         this.map.on('click', 'data', e => {
           this.debounceSelectPrecinct(e.features[0].id);
@@ -200,7 +200,7 @@ class PrecinctsView extends React.Component {
 
   refreshMap() {
     const { data } = this.props;
-    const { mode, fromDate, toDate, categories, complainant_age_incident } = this.state;
+    const { mode, filters } = this.state;
     let allegationsCount = 0;
     const complaints = new Set();
     const officers = new Set();
@@ -209,8 +209,6 @@ class PrecinctsView extends React.Component {
     const complaintsPrecinct = {};
     const officersPrecinct = {};
     const precinctsData = {};
-    const primaryCategories = categories.filter((c) => c.indexOf(':') === -1);
-    const secondaryCategories = categories.filter((c) => c.indexOf(':') !== -1);
 
     precincts.forEach((p) => {
       allegationsPrecinct[p] = new Set();
@@ -228,29 +226,7 @@ class PrecinctsView extends React.Component {
       );
     })
 
-    data.filter((d) => {
-      const date = new Date(`${d.year_received}/${d.month_received}/01`);
-      return date >= fromDate && date <= toDate;
-    }).filter((d) => {
-      return categories.length === 0 || primaryCategories.includes(d.fado_type) || secondaryCategories.some((c) => {
-        const array = c.split(':');
-        const primary = array[0];
-        const secondary = array[1];
-        return d.fado_type === primary && d.allegation === secondary;
-      });
-    }).filter((d) => {
-      return ['complainant_ethnicity', 'complainant_gender', 'mos_ethnicity', 'mos_gender', 'board_disposition'].every((name) => {
-        return this.state[name].length === 0 || this.state[name].includes(d[name]);
-      })
-    }).filter((d) => {
-      return complainant_age_incident.length === 0 || complainant_age_incident.some((ageGroup) => {
-        const array = ageGroup.split(':');
-        const min = array[0];
-        const max = array[1];
-
-        return d.complainant_age_incident >= min && d.complainant_age_incident <= max;
-      })
-    }).forEach((d) => {
+    filterData(data, filters).forEach((d) => {
       if (officersPrecinct[d.precinct]) {
         officersPrecinct[d.precinct].add(d.unique_mos_id);
         complaintsPrecinct[d.precinct].add(d.complaint_id);
@@ -271,7 +247,7 @@ class PrecinctsView extends React.Component {
           'allegations': new Set(),
         };
       }
-      officersData[d.unique_mos_id].allegations.add(`${d.complaint_id}:${d.fado_type}:${d.allegation}`);
+      officersData[d.unique_mos_id].allegations.add(d.id);
       officersData[d.unique_mos_id].complaints.add(d.complaint_id);
     });
 
@@ -340,34 +316,43 @@ class PrecinctsView extends React.Component {
   handleModeClick = (e, { name }) => this.setState({ mode: name }, this.refreshMap);
 
   handleFromDateChange = (date) => {
-    this.setState({ fromDate: date}, this.refreshMap);
+    const { filters } = this.state;
+    filters.fromDate = date;
+    this.setState({ filters }, this.refreshMap);
   }
 
   handleToDateChange = (date) => {
-    this.setState({ toDate: date}, this.refreshMap);
+    const { filters } = this.state;
+    filters.toDate = date;
+    this.setState({ filters }, this.refreshMap);
   }
 
   handleCategoryFilterChange = (e, { value }) => {
     const selectedPrimaries = value.filter((v) => v.indexOf(':') === -1);
-
-    this.setState({ categories: value.filter((v) => !selectedPrimaries.some((t) => v.startsWith(`${t}:`))) }, this.refreshMap);
+    const { filters } = this.state;
+    filters.categories = value.filter((v) => !selectedPrimaries.some((t) => v.startsWith(`${t}:`)));
+    this.setState({ filters }, this.refreshMap);
   };
 
   handleFilterChange = (e, { name, value }) => {
-    this.setState({ [name]: value }, this.refreshMap);
+    const { filters } = this.state;
+    filters[name] = value;
+    this.setState({ filters }, this.refreshMap);
   };
 
   handleReset = () => {
     this.setState({
-      fromDate: minDate,
-      toDate: maxDate,
-      categories: [],
-      complainant_ethnicity: [],
-      complainant_gender: [],
-      complainant_age_incident: [],
-      mos_ethnicity: [],
-      mos_gender: [],
-      board_disposition: [],
+      filters: {
+        fromDate: minDate,
+        toDate: maxDate,
+        categories: [],
+        complainant_ethnicity: [],
+        complainant_gender: [],
+        complainant_age_incident: [],
+        mos_ethnicity: [],
+        mos_gender: [],
+        board_disposition: [],
+      },
     }, this.refreshMap);
   };
 
@@ -375,17 +360,14 @@ class PrecinctsView extends React.Component {
     const {
       mode, fromDate, toDate, categories, selectedPrecinct, precinctsData,
       allegationsCount, complaintsCount, officersCount,
-      complainant_ethnicity, complainant_gender, complainant_age_incident, mos_ethnicity, mos_gender, board_disposition
+      filters
     } = this.state;
     return (
       <>
         <div ref={el => this.mapContainer = el} className='map-container'>
         </div>
         { !selectedPrecinct &&
-          <MapConfig mode={mode} fromDate={fromDate} toDate={toDate} selectedCategories={categories}
-            complainant_ethnicity={complainant_ethnicity} complainant_gender={complainant_gender}
-            complainant_age_incident={complainant_age_incident} mos_ethnicity={mos_ethnicity}
-            mos_gender={mos_gender} board_disposition={board_disposition}
+          <FilterPanel mode={mode} fromDate={fromDate} toDate={toDate} filters={filters}
             allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
             handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}
             handleCategoryFilterChange={this.handleCategoryFilterChange} handleFilterChange={this.handleFilterChange}
@@ -394,8 +376,7 @@ class PrecinctsView extends React.Component {
         }
         { selectedPrecinct &&
           <PrecinctData selectedPrecinct={selectedPrecinct} fromDate={fromDate} toDate={toDate} selectedCategories={categories}
-            complainant_ethnicity={complainant_ethnicity} complainant_gender={complainant_gender} complainant_age_incident={complainant_age_incident}
-            mos_ethnicity={mos_ethnicity} mos_gender={mos_gender} board_disposition={board_disposition}
+            filters={filters}
             data={precinctsData[selectedPrecinct]} handleUnselectPrecinct={this.handleUnselectPrecinct}
           />
         }
