@@ -2,6 +2,7 @@ import React from 'react';
 import { Segment, Header, Button, Icon, Grid, Statistic, Table, Divider } from 'semantic-ui-react';
 
 import { toOrdinal } from './utils/ordinals.js'
+import { commands } from './utils/searchTerms.js'
 
 import './PrecinctData.scss';
 
@@ -21,7 +22,7 @@ class PrecinctData extends React.Component {
             </a>
           </Table.Cell>
           <Table.Cell>{officer.shield_no > 0 ? officer.shield_no : ''}</Table.Cell>
-          <Table.Cell>{officer.command_now}</Table.Cell>
+          <Table.Cell title={commands[officer.command_now]}>{officer.command_now}</Table.Cell>
           <Table.Cell>{officer.rank_now}</Table.Cell>
           <Table.Cell>{officer.complaints.size} / { [...officer.complaints].filter(x => data.complaints.has(x)).length }</Table.Cell>
           <Table.Cell>{officer.allegations.size} / { [...officer.allegations].filter(x => data.allegations.has(x)).length } </Table.Cell>

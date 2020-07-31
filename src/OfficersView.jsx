@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import { Grid, Segment, Table, Ref, Sticky, Dimmer, Loader, Menu, Icon } from 'semantic-ui-react';
 
-import { minDate, maxDate } from './utils/searchTerms';
+import { minDate, maxDate, commands } from './utils/searchTerms';
 import { filterData } from './utils/dataUtils';
 
 import FilterPanel from './FilterPanel';
@@ -143,7 +143,7 @@ class OfficersView extends React.Component {
             </a>
           </Table.Cell>
           <Table.Cell>{officer.shield_no > 0 ? officer.shield_no : ''}</Table.Cell>
-          <Table.Cell>{officer.command_now}</Table.Cell>
+          <Table.Cell title={commands[officer.command_now]}>{officer.command_now}</Table.Cell>
           <Table.Cell>{officer.rank_now}</Table.Cell>
           <Table.Cell>{officer.complaints.size}</Table.Cell>
           <Table.Cell>{officer.allegations.size}</Table.Cell>

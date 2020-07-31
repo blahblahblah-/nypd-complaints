@@ -230,7 +230,7 @@ class PrecinctsView extends React.Component {
       if (officersPrecinct[d.precinct]) {
         officersPrecinct[d.precinct].add(d.unique_mos_id);
         complaintsPrecinct[d.precinct].add(d.complaint_id);
-        allegationsPrecinct[d.precinct].add(`${d.complaint_id}:${d.fado_type}:${d.allegation}`);
+        allegationsPrecinct[d.precinct].add(d.id);
       }
       allegationsCount++;
       officers.add(d.unique_mos_id);
