@@ -80,19 +80,19 @@ class PrecinctData extends React.Component {
             {
               complainant_age_incident.length > 0 &&
               <Header as='h5'>
-                Complainant age group: { complainant_age_incident.join(', ') }
+                Complainant age group: { complainant_age_incident.join(', ').replace(/:/gi, '-') }
               </Header>
             }
             {
               mos_ethnicity.length > 0 &&
               <Header as='h5'>
-                Officer gender: { mos_ethnicity.join(', ') }
+                Officer ethnicity: { mos_ethnicity.join(', ') }
               </Header>
             }
             {
               mos_gender.length > 0 &&
               <Header as='h5'>
-                Officer age group: { mos_gender.join(', ') }
+                Officer gender: { mos_gender.join(', ') }
               </Header>
             }
             {
