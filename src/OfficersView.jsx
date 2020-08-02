@@ -177,7 +177,7 @@ class OfficersView extends React.Component {
       <Grid centered>
         <Grid.Column width={5}>
         <Sticky context={this.contextRef}>
-          <FilterPanel filters={filters}
+          <FilterPanel filters={filters} displayProPublicaLink
             allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
             handleFromDateChange={this.handleFromDateChange} handleCategoryFilterChange={this.handleCategoryFilterChange}
             handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />

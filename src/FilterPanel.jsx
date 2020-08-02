@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Form, Menu, Dropdown, Button } from 'semantic-ui-react';
+import { Segment, Form, Menu, Dropdown, Button, Icon } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
 import { minDate, maxDate, categories, ethnicities, genders, officerGenders, ageGroups, commands, ranks, conclusions } from './utils/searchTerms';
@@ -73,7 +73,7 @@ class FilterPanel extends React.Component {
 
   render() {
     const {
-      mode, filters,
+      mode, filters, displayProPublicaLink,
       allegationsCount, complaintsCount, officersCount,
       handleFromDateChange, handleToDateChange, handleModeClick, handleCategoryFilterChange, handleFilterChange, handleReset
     } = this.props;
@@ -281,6 +281,11 @@ class FilterPanel extends React.Component {
           <Form.Field>
             <Button inverted onClick={handleReset}>Reset</Button>
           </Form.Field>
+          { displayProPublicaLink &&
+             <Form.Field>
+              Search by Name or Badge Number on <a href='https://projects.propublica.org/nypd-ccrb/' target='_blank' rel="noopener noreferrer">ProPublica <Icon name='external' size='small' link /></a>.
+            </Form.Field>
+          }
         </Form>
       </Segment>
     );
