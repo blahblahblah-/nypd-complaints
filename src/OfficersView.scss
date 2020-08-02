@@ -1,0 +1,25 @@
+.popup-btn:after {
+  display: inline-block;
+  content: '\f0d7';
+  font-family: Icons;
+  font-style: normal;
+  font-weight: 400;
+  height: 1em;
+  width: auto;
+  margin: 0 0 0 .5em;
+}
+
+.popup-btn.open:after {
+  content: '\f0d8';
+}
+
+.ui.inverted.segment.mobile-table {
+  padding: 0;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: flex-end;
+}

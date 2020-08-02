@@ -1,10 +1,12 @@
 import React, { createRef } from 'react';
-import { Grid, Segment, Table, Ref, Sticky, Dimmer, Loader, Menu, Icon } from 'semantic-ui-react';
+import { Grid, Segment, Table, Ref, Sticky, Dimmer, Loader, Menu, Icon, Responsive, Button, Popup } from 'semantic-ui-react';
 
 import { minDate, maxDate, commands } from './utils/searchTerms';
 import { filterData, sortData } from './utils/dataUtils';
 
 import FilterPanel from './FilterPanel';
+
+import './OfficersView.scss';
 
 const paginationSize = 200;
 
@@ -35,6 +37,7 @@ class OfficersView extends React.Component {
     page: 1,
     sortColumn: 'complaints',
     sortDirection: 'descending',
+    isMobilePopupOpen: false,
   };
 
   componentDidMount() {
@@ -144,6 +147,11 @@ class OfficersView extends React.Component {
     this.setState({ page: Number(name)});
   }
 
+  handleToggleMobilePopup = () => {
+    const { isMobilePopupOpen } = this.state;
+    this.setState({ isMobilePopupOpen: !isMobilePopupOpen });
+  }
+
   renderRows() {
     const { officersData, page, sortColumn, sortDirection } = this.state;
     const officers = Object.keys(officersData).map((key) => officersData[key]);
@@ -183,99 +191,176 @@ class OfficersView extends React.Component {
 
   render() {
     const {
-      loaded, sortColumn, sortDirection,
+      loaded, sortColumn, sortDirection, isMobilePopupOpen,
       allegationsCount, complaintsCount, officersCount,
       filters, page
     } = this.state;
 
     return (
-      <Grid centered>
-        <Grid.Column width={5}>
-        <Sticky context={this.contextRef}>
-          <FilterPanel filters={filters} displayProPublicaLink  
-            allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
-            handleFromDateChange={this.handleFromDateChange} handleCategoryFilterChange={this.handleCategoryFilterChange}
-            handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />
+      <>
+        <Responsive as={Grid} centered minWidth={Responsive.onlyTablet.minWidth}>
+          <Grid.Column width={5}>
+          <Sticky context={this.contextRef}>
+            <FilterPanel filters={filters} displayProPublicaLink
+              allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
+              handleFromDateChange={this.handleFromDateChange} handleCategoryFilterChange={this.handleCategoryFilterChange}
+              handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />
+            }
+          </Sticky>
+          </Grid.Column>
+          <Grid.Column width={11} floated='right'>
+          {
+            !loaded &&
+            <Dimmer active>
+              <Loader inverted></Loader>
+            </Dimmer>
           }
-        </Sticky>
-        </Grid.Column>
-        <Grid.Column width={11} floated='right'>
-        {
-          !loaded &&
-          <Dimmer active>
-            <Loader inverted></Loader>
-          </Dimmer>
-        }
-          <Ref innerRef={this.contextRef}>
-            <Segment inverted>
-              <Table basic='very' size='small' unstackable fixed inverted sortable>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell
-                      sorted={sortColumn === 'name' ? sortDirection : null}
-                      onClick={() => this.changeSort('name')}
-                    >
-                      Name
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                      sorted={sortColumn === 'shield_no' ? sortDirection : null}
-                      onClick={() => this.changeSort('shield_no')}
-                    >
-                      Shield No.
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                      sorted={sortColumn === 'command_now' ? sortDirection : null}
-                      onClick={() => this.changeSort('command_now')}
-                    >
-                      Current Command
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                      sorted={sortColumn === 'rank_now' ? sortDirection : null}
-                      onClick={() => this.changeSort('rank_now')}
-                    >
-                      Current Rank
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                      sorted={sortColumn === 'complaints' ? sortDirection : null}
-                      onClick={() => this.changeSort('complaints')}
-                    >
-                      Complaints
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                      sorted={sortColumn === 'allegations' ? sortDirection : null}
-                      onClick={() => this.changeSort('allegations')}
-                    >
-                      Allegations
-                    </Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  { this.renderRows() }
-                </Table.Body>
-                <Table.Footer>
-                  { officersCount > paginationSize &&
+            <Ref innerRef={this.contextRef}>
+              <Segment inverted>
+                <Table basic='very' size='small' unstackable fixed inverted sortable>
+                  <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell colSpan='6'>
-                        <Menu floated='right' pagination inverted>
-                          <Menu.Item as='a' icon disabled={page === 1} onClick={this.handleBack}>
-                            <Icon name='chevron left' />
-                          </Menu.Item>
-                          {
-                            this.renderPaginationButtons()
-                          }
-                          <Menu.Item as='a' icon disabled={page === Math.floor(officersCount / paginationSize)} onClick={this.handleFoward}>
-                            <Icon name='chevron right' />
-                          </Menu.Item>
-                        </Menu>
+                      <Table.HeaderCell
+                        sorted={sortColumn === 'name' ? sortDirection : null}
+                        onClick={() => this.changeSort('name')}
+                      >
+                        Name
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={sortColumn === 'shield_no' ? sortDirection : null}
+                        onClick={() => this.changeSort('shield_no')}
+                      >
+                        Shield No.
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={sortColumn === 'command_now' ? sortDirection : null}
+                        onClick={() => this.changeSort('command_now')}
+                      >
+                        Current Command
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={sortColumn === 'rank_now' ? sortDirection : null}
+                        onClick={() => this.changeSort('rank_now')}
+                      >
+                        Current Rank
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={sortColumn === 'complaints' ? sortDirection : null}
+                        onClick={() => this.changeSort('complaints')}
+                      >
+                        Complaints
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={sortColumn === 'allegations' ? sortDirection : null}
+                        onClick={() => this.changeSort('allegations')}
+                      >
+                        Allegations
                       </Table.HeaderCell>
                     </Table.Row>
-                  }
-                </Table.Footer>
-              </Table>
-            </Segment>
-          </Ref>
-        </Grid.Column>  
-      </Grid>
+                  </Table.Header>
+                  <Table.Body>
+                    { this.renderRows() }
+                  </Table.Body>
+                  <Table.Footer>
+                    { officersCount > paginationSize &&
+                      <Table.Row>
+                        <Table.HeaderCell colSpan='6'>
+                          <Menu floated='right' pagination inverted className='pagination'>
+                            <Menu.Item as='a' icon disabled={page === 1} onClick={this.handleBack}>
+                              <Icon name='chevron left' />
+                            </Menu.Item>
+                            {
+                              this.renderPaginationButtons()
+                            }
+                            <Menu.Item as='a' icon disabled={page === Math.floor(officersCount / paginationSize)} onClick={this.handleFoward}>
+                              <Icon name='chevron right' />
+                            </Menu.Item>
+                          </Menu>
+                        </Table.HeaderCell>
+                      </Table.Row>
+                    }
+                  </Table.Footer>
+                </Table>
+              </Segment>
+            </Ref>
+          </Grid.Column>
+        </Responsive>
+        <Responsive open={isMobilePopupOpen} {...Responsive.onlyMobile}
+            as={Popup} trigger={<Responsive as={Button} basic inverted fluid {...Responsive.onlyMobile} className={isMobilePopupOpen ? 'open popup-btn' : 'popup-btn'} onClick={this.handleToggleMobilePopup}>Filters</Responsive>}
+            on='click' position='bottom center' flowing inverted style={{padding: 0, height: '455px', overflowY: 'scroll'}}
+        >
+          <FilterPanel filters={filters} displayProPublicaLink
+              allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
+              handleFromDateChange={this.handleFromDateChange} handleCategoryFilterChange={this.handleCategoryFilterChange}
+              handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />
+        </Responsive>
+        <Responsive as={Segment} inverted {...Responsive.onlyMobile} className='mobile-table'>
+          <Table basic='very' size='small' unstackable fixed inverted sortable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'name' ? sortDirection : null}
+                  onClick={() => this.changeSort('name')}
+                >
+                  Name
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'shield_no' ? sortDirection : null}
+                  onClick={() => this.changeSort('shield_no')}
+                >
+                  Shield No.
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'command_now' ? sortDirection : null}
+                  onClick={() => this.changeSort('command_now')}
+                >
+                  Current Command
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'rank_now' ? sortDirection : null}
+                  onClick={() => this.changeSort('rank_now')}
+                >
+                  Current Rank
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'complaints' ? sortDirection : null}
+                  onClick={() => this.changeSort('complaints')}
+                >
+                  Complaints
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'allegations' ? sortDirection : null}
+                  onClick={() => this.changeSort('allegations')}
+                >
+                  Allegations
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              { this.renderRows() }
+            </Table.Body>
+            <Table.Footer>
+              { officersCount > paginationSize &&
+                <Table.Row>
+                  <Table.HeaderCell colSpan='6'>
+                    <Menu pagination inverted className='pagination'>
+                      <Menu.Item as='a' icon disabled={page === 1} onClick={this.handleBack}>
+                        <Icon name='chevron left' />
+                      </Menu.Item>
+                      {
+                        this.renderPaginationButtons()
+                      }
+                      <Menu.Item as='a' icon disabled={page === Math.floor(officersCount / paginationSize)} onClick={this.handleFoward}>
+                        <Icon name='chevron right' />
+                      </Menu.Item>
+                    </Menu>
+                  </Table.HeaderCell>
+                </Table.Row>
+              }
+            </Table.Footer>
+          </Table>
+        </Responsive>
+      </>
     );
   }
 }
