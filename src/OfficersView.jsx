@@ -33,6 +33,8 @@ class OfficersView extends React.Component {
     officersCount: 0,
     officersData: {},
     page: 1,
+    sortColumn: 'complaints',
+    sortDirection: 'descending',
   };
 
   componentDidMount() {
@@ -68,6 +70,19 @@ class OfficersView extends React.Component {
     });
 
     this.setState({ officersData: officersData, allegationsCount: allegationsCount, complaintsCount: complaints.size, officersCount: officers.size, loaded: true, page: 1});
+  }
+
+  changeSort(column) {
+    const { sortColumn, sortDirection } = this.state;
+    const newState = { sortColumn: column, sortDirection: 'ascending', page: 1 };
+
+    if (column === sortColumn) {
+      newState['sortDirection'] = sortDirection === 'ascending' ? 'descending' : 'ascending';
+    } else if (['complaints', 'allegations'].includes(column)) {
+      newState['sortDirection'] = 'descending';
+    }
+
+    this.setState(newState);
   }
 
   handleFromDateChange = (date) => {
@@ -130,9 +145,32 @@ class OfficersView extends React.Component {
   }
 
   renderRows() {
-    const { officersData, page } = this.state;
+    const { officersData, page, sortColumn, sortDirection } = this.state;
     const officers = Object.keys(officersData).map((key) => officersData[key]);
-    const sortedOfficers = [...officers].sort((a, b) => b.complaints.size - a.complaints.size).slice((page - 1) * paginationSize, page * paginationSize - 1);
+    const sortedOfficers = [...officers].sort((a, b) => {
+      let aVal = a[sortColumn];
+      let bVal = b[sortColumn];
+      let result = 0;
+
+      if (['allegations', 'complaints'].includes(sortColumn)) {
+        aVal = a[sortColumn].size;
+        bVal = b[sortColumn].size;
+      } else if (sortColumn === 'name') {
+        aVal = `${a.last_name}, ${a.first_name}`;
+        bVal = `${b.last_name}, ${b.first_name}`;
+      }
+
+      if (aVal > bVal) {
+        result = 1;
+      } else if (bVal > aVal) {
+        result = -1;
+      }
+
+      if (sortDirection === 'descending') {
+        return result * -1;
+      }
+      return result
+    }).slice((page - 1) * paginationSize, page * paginationSize - 1);
 
     return sortedOfficers.map((officer) => {
       return (
@@ -168,7 +206,7 @@ class OfficersView extends React.Component {
 
   render() {
     const {
-      loaded,
+      loaded, sortColumn, sortDirection,
       allegationsCount, complaintsCount, officersCount,
       filters, page
     } = this.state;
@@ -177,7 +215,7 @@ class OfficersView extends React.Component {
       <Grid centered>
         <Grid.Column width={5}>
         <Sticky context={this.contextRef}>
-          <FilterPanel filters={filters} displayProPublicaLink
+          <FilterPanel filters={filters} displayProPublicaLink  
             allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
             handleFromDateChange={this.handleFromDateChange} handleCategoryFilterChange={this.handleCategoryFilterChange}
             handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />
@@ -193,15 +231,45 @@ class OfficersView extends React.Component {
         }
           <Ref innerRef={this.contextRef}>
             <Segment inverted>
-              <Table basic='very' size='small' unstackable fixed inverted>
+              <Table basic='very' size='small' unstackable fixed inverted sortable>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Name</Table.HeaderCell>
-                    <Table.HeaderCell>Shield No.</Table.HeaderCell>
-                    <Table.HeaderCell>Current Command</Table.HeaderCell>
-                    <Table.HeaderCell>Current Rank</Table.HeaderCell>
-                    <Table.HeaderCell>Complaints</Table.HeaderCell>
-                    <Table.HeaderCell>Allegations</Table.HeaderCell>
+                    <Table.HeaderCell
+                      sorted={sortColumn === 'name' ? sortDirection : null}
+                      onClick={() => this.changeSort('name')}
+                    >
+                      Name
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                      sorted={sortColumn === 'shield_no' ? sortDirection : null}
+                      onClick={() => this.changeSort('shield_no')}
+                    >
+                      Shield No.
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                      sorted={sortColumn === 'command_now' ? sortDirection : null}
+                      onClick={() => this.changeSort('command_now')}
+                    >
+                      Current Command
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                      sorted={sortColumn === 'rank_now' ? sortDirection : null}
+                      onClick={() => this.changeSort('rank_now')}
+                    >
+                      Current Rank
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                      sorted={sortColumn === 'complaints' ? sortDirection : null}
+                      onClick={() => this.changeSort('complaints')}
+                    >
+                      Complaints
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                      sorted={sortColumn === 'allegations' ? sortDirection : null}
+                      onClick={() => this.changeSort('allegations')}
+                    >
+                      Allegations
+                    </Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>

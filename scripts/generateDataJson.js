@@ -11,7 +11,7 @@ const convertObj = (obj, id) => {
     complaint_id: obj.complaint_id,
     first_name: obj.first_name,
     last_name: obj.last_name,
-    shield_no: obj.shield_no,
+    shield_no: Number(obj.shield_no),
     month_received: Number(obj.month_received),
     year_received: Number(obj.year_received),
     command_at_incident: obj.command_at_incident,
