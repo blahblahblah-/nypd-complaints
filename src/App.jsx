@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Header, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
+import { Segment, Header, Menu, Icon, Dimmer, Loader, Responsive } from 'semantic-ui-react';
 
 import AboutModal from './AboutModal';
 import PrecinctsView from './PrecinctsView';
@@ -45,7 +45,7 @@ class App extends React.Component {
     const { activeItem, data, isDataLoaded } = this.state;
     return (
       <div>
-        <Segment inverted>
+        <Responsive as={Segment} inverted minWidth={Responsive.onlyTablet.minWidth}>
           <Header as='h1' color='blue' inverted>
             NYPD Complaints
             <Header.Subheader>
@@ -53,7 +53,12 @@ class App extends React.Component {
               <AboutModal trigger={<Icon name='info circle' link aria-label='info' fitted />} />
             </Header.Subheader>
           </Header>
-        </Segment>
+        </Responsive>
+        <Responsive as={Segment} inverted {...Responsive.onlyMobile}>
+          <Header as='h3' color='blue' inverted>
+            NYPD Complaints <AboutModal trigger={<Icon name='info circle' link aria-label='info' fitted />} />
+          </Header>
+        </Responsive>
         {  this.renderMenu()  }
         {
           !isDataLoaded &&

@@ -2,6 +2,8 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { debounce } from 'lodash';
 
+import { Responsive, Button, Popup } from 'semantic-ui-react';
+
 import FilterPanel from './FilterPanel';
 import PrecinctData from './PrecinctData';
 import { minDate, maxDate } from './utils/searchTerms';
@@ -35,6 +37,7 @@ class PrecinctsView extends React.Component {
     allegationsCount: 0,
     complaintsCount: 0,
     officersCount: 0,
+    isMobilePopupOpen: false,
   };
 
   componentDidUpdate(prevProps) {
@@ -353,21 +356,54 @@ class PrecinctsView extends React.Component {
         mos_gender: [],
         board_disposition: [],
       },
+      isMobilePopupOpen: false,
     }, this.refreshMap);
   };
 
+  handleToggleMobilePopup = () => {
+    const { isMobilePopupOpen } = this.state;
+    this.setState({ isMobilePopupOpen: !isMobilePopupOpen });
+  }
+
   render() {
     const {
-      mode, fromDate, toDate, categories, selectedPrecinct, precinctsData,
+      mode, fromDate, toDate, categories, selectedPrecinct, precinctsData, isMobilePopupOpen,
       allegationsCount, complaintsCount, officersCount,
       filters
     } = this.state;
     return (
       <>
+        { !selectedPrecinct &&
+          <Responsive open={isMobilePopupOpen}
+            as={Popup} trigger={<Responsive as={Button} basic inverted fluid {...Responsive.onlyMobile} className={isMobilePopupOpen ? 'open popup-btn' : 'popup-btn'} onClick={this.handleToggleMobilePopup}>Filters</Responsive>}
+            on='click' position='bottom center' flowing inverted style={{padding: 0, height: '455px', overflowY: 'scroll'}}
+          >
+            <FilterPanel minWidth={Responsive.onlyTablet.minWidth}
+              mode={mode} fromDate={fromDate} toDate={toDate} filters={filters}
+              allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
+              handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}
+              handleCategoryFilterChange={this.handleCategoryFilterChange} handleFilterChange={this.handleFilterChange}
+              handleModeClick={this.handleModeClick} handleReset={this.handleReset}
+            />
+          </Responsive>
+        }
+        { selectedPrecinct &&
+          <Responsive open={isMobilePopupOpen}
+            as={Popup} trigger={<Responsive as={Button} basic inverted fluid {...Responsive.onlyMobile}  className={isMobilePopupOpen ? 'open popup-btn' : 'popup-btn'} onClick={this.handleToggleMobilePopup}>{toOrdinal(selectedPrecinct)} Precinct Precinct Data</Responsive>}
+            on='click' position='bottom center' flowing inverted style={{padding: 0, height: '455px', overflowY: 'scroll'}}
+          >
+            <PrecinctData minWidth={Responsive.onlyTablet.minWidth} isMobile
+            selectedPrecinct={selectedPrecinct} fromDate={fromDate} toDate={toDate} selectedCategories={categories}
+            filters={filters}
+            data={precinctsData[selectedPrecinct]} handleUnselectPrecinct={this.handleUnselectPrecinct}
+          />
+          </Responsive>
+        }
         <div ref={el => this.mapContainer = el} className='map-container'>
         </div>
         { !selectedPrecinct &&
-          <FilterPanel mode={mode} fromDate={fromDate} toDate={toDate} filters={filters}
+          <Responsive as={FilterPanel} minWidth={Responsive.onlyTablet.minWidth}
+            mode={mode} fromDate={fromDate} toDate={toDate} filters={filters}
             allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
             handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}
             handleCategoryFilterChange={this.handleCategoryFilterChange} handleFilterChange={this.handleFilterChange}
@@ -375,7 +411,8 @@ class PrecinctsView extends React.Component {
           />
         }
         { selectedPrecinct &&
-          <PrecinctData selectedPrecinct={selectedPrecinct} fromDate={fromDate} toDate={toDate} selectedCategories={categories}
+          <Responsive as={PrecinctData} minWidth={Responsive.onlyTablet.minWidth}
+            selectedPrecinct={selectedPrecinct} fromDate={fromDate} toDate={toDate} selectedCategories={categories}
             filters={filters}
             data={precinctsData[selectedPrecinct]} handleUnselectPrecinct={this.handleUnselectPrecinct}
           />

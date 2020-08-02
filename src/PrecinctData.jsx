@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Header, Button, Icon, Grid, Statistic, Table, Divider } from 'semantic-ui-react';
+import { Segment, Header, Button, Icon, Grid, Statistic, Table, Divider, Responsive } from 'semantic-ui-react';
 
 import { toOrdinal } from './utils/ordinals';
 import { commands } from './utils/searchTerms';
@@ -47,9 +47,9 @@ class PrecinctData extends React.Component {
     });
   }
 
-  render() {
+  renderContent() {
     const {
-      selectedPrecinct, data,
+      selectedPrecinct, data, isMobile,
       filters,
       handleUnselectPrecinct,
     } = this.props;
@@ -59,127 +59,139 @@ class PrecinctData extends React.Component {
     } = filters;
 
     return (
-      <Segment inverted className='precinct-data'>
-        <Segment className='inner-box'>
-          <Grid>
-            <Grid.Column floated='left' width={2}>
-              <Button icon title="Back" onClick={handleUnselectPrecinct}>
-                <Icon name='arrow left' />
-              </Button>
-            </Grid.Column>
-            <Grid.Column width={14}>
-              <Header as='h3'>{ toOrdinal(selectedPrecinct) } Precinct </Header>
-            </Grid.Column>
-          </Grid>
-          <div className='filters'>
+      <Segment inverted={isMobile} className='inner-box'>
+        <Responsive as={Grid} minWidth={Responsive.onlyTablet.minWidth}>
+          <Grid.Column floated='left' width={2}>
+            <Button icon title="Back" onClick={handleUnselectPrecinct}>
+              <Icon name='arrow left' />
+            </Button>
+          </Grid.Column>
+          <Grid.Column width={14}>
+            <Header as='h3'>{ toOrdinal(selectedPrecinct) } Precinct </Header>
+          </Grid.Column>
+        </Responsive>
+        <div className='filters'>
+          <Header as='h5'>
+            Period: {fromDate.getFullYear()}/{(fromDate.getMonth() + 1 + '').padStart(2, '0')} to {toDate.getFullYear()}/{(toDate.getMonth() + 1 + '').padStart(2, '0')}
+          </Header>
+          {
+            categories.length > 0 &&
             <Header as='h5'>
-              Period: {fromDate.getFullYear()}/{(fromDate.getMonth() + 1 + '').padStart(2, '0')} to {toDate.getFullYear()}/{(toDate.getMonth() + 1 + '').padStart(2, '0')}
+              Allegation type: { categories.map((c) => c.replace(':', ' - ')).join(', ') }
             </Header>
-            {
-              categories.length > 0 &&
-              <Header as='h5'>
-                Allegation type: { categories.map((c) => c.replace(':', ' - ')).join(', ') }
-              </Header>
-            }
-            {
-              complainant_ethnicity.length > 0 &&
-              <Header as='h5'>
-                Complainant ethnicity: { complainant_ethnicity.join(', ') }
-              </Header>
-            }
-            {
-              complainant_gender.length > 0 &&
-              <Header as='h5'>
-                Complainant gender: { complainant_gender.join(', ') }
-              </Header>
-            }
-            {
-              complainant_age_incident.length > 0 &&
-              <Header as='h5'>
-                Complainant age group: { complainant_age_incident.join(', ').replace(/:/gi, '-') }
-              </Header>
-            }
-            {
-              mos_ethnicity.length > 0 &&
-              <Header as='h5'>
-                Officer ethnicity: { mos_ethnicity.join(', ') }
-              </Header>
-            }
-            {
-              mos_gender.length > 0 &&
-              <Header as='h5'>
-                Officer gender: { mos_gender.join(', ') }
-              </Header>
-            }
-            {
-              board_disposition.length > 0 &&
-              <Header as='h5'>
-                CCRB Conclusion: { board_disposition.join(', ') }
-              </Header>
-            }
-          </div>
-          <Statistic.Group widths={3} size='tiny'>
-            <Statistic>
-              <Statistic.Value>{ data.officers.length.toLocaleString('en-US') }</Statistic.Value>
-              <Statistic.Label>Officers<br />w/ Complaints</Statistic.Label>
-            </Statistic>
-            <Statistic>
-              <Statistic.Value>{ data.complaints.size.toLocaleString('en-US') }</Statistic.Value>
-              <Statistic.Label>Complaints</Statistic.Label>
-            </Statistic>
-            <Statistic>
-              <Statistic.Value>{ data.allegations.size.toLocaleString('en-US') }</Statistic.Value>
-              <Statistic.Label>Allegations</Statistic.Label>
-            </Statistic>
+          }
+          {
+            complainant_ethnicity.length > 0 &&
+            <Header as='h5'>
+              Complainant ethnicity: { complainant_ethnicity.join(', ') }
+            </Header>
+          }
+          {
+            complainant_gender.length > 0 &&
+            <Header as='h5'>
+              Complainant gender: { complainant_gender.join(', ') }
+            </Header>
+          }
+          {
+            complainant_age_incident.length > 0 &&
+            <Header as='h5'>
+              Complainant age group: { complainant_age_incident.join(', ').replace(/:/gi, '-') }
+            </Header>
+          }
+          {
+            mos_ethnicity.length > 0 &&
+            <Header as='h5'>
+              Officer ethnicity: { mos_ethnicity.join(', ') }
+            </Header>
+          }
+          {
+            mos_gender.length > 0 &&
+            <Header as='h5'>
+              Officer gender: { mos_gender.join(', ') }
+            </Header>
+          }
+          {
+            board_disposition.length > 0 &&
+            <Header as='h5'>
+              CCRB Conclusion: { board_disposition.join(', ') }
+            </Header>
+          }
+        </div>
+        <Statistic.Group widths={isMobile ?  2 : 3} size='tiny' inverted={isMobile}>
+          <Statistic>
+            <Statistic.Value>{ data.officers.length.toLocaleString('en-US') }</Statistic.Value>
+            <Statistic.Label>Officers<br />w/ Complaints</Statistic.Label>
+          </Statistic>
+          <Statistic>
+            <Statistic.Value>{ data.complaints.size.toLocaleString('en-US') }</Statistic.Value>
+            <Statistic.Label>Complaints</Statistic.Label>
+          </Statistic>
+          <Statistic>
+            <Statistic.Value>{ data.allegations.size.toLocaleString('en-US') }</Statistic.Value>
+            <Statistic.Label>Allegations</Statistic.Label>
+          </Statistic>
 
-          </Statistic.Group>
-          <Divider />
-          <Table basic='very' size='small' unstackable fixed sortable compact>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell
-                  sorted={sortColumn === 'name' ? sortDirection : null}
-                  onClick={() => this.changeSort('name')}
-                >
-                  Name
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={sortColumn === 'shield_no' ? sortDirection : null}
-                  onClick={() => this.changeSort('shield_no')}
-                >
-                  Shield<br />No.
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={sortColumn === 'command_now' ? sortDirection : null}
-                  onClick={() => this.changeSort('command_now')}
-                >
-                  Current<br />Command
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={sortColumn === 'rank_now' ? sortDirection : null}
-                  onClick={() => this.changeSort('rank_now')}
-                >
-                  Current<br />Rank
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={sortColumn === 'complaints' ? sortDirection : null}
-                  onClick={() => this.changeSort('complaints')}
-                >
-                  Complaints<br />all/pct
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={sortColumn === 'allegations' ? sortDirection : null}
-                  onClick={() => this.changeSort('allegations')}
-                >
-                  Allegations<br />all/pct
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              { this.renderOfficersTableData() }
-            </Table.Body>
-          </Table>
-        </Segment>
+        </Statistic.Group>
+        <Divider />
+        <Table basic='very' size='small' unstackable fixed sortable compact inverted={isMobile}>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell
+                sorted={sortColumn === 'name' ? sortDirection : null}
+                onClick={() => this.changeSort('name')}
+              >
+                Name
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortColumn === 'shield_no' ? sortDirection : null}
+                onClick={() => this.changeSort('shield_no')}
+              >
+                Shield<br />No.
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortColumn === 'command_now' ? sortDirection : null}
+                onClick={() => this.changeSort('command_now')}
+              >
+                Current<br />Command
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortColumn === 'rank_now' ? sortDirection : null}
+                onClick={() => this.changeSort('rank_now')}
+              >
+                Current<br />Rank
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortColumn === 'complaints' ? sortDirection : null}
+                onClick={() => this.changeSort('complaints')}
+              >
+                Complaints<br />all/pct
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortColumn === 'allegations' ? sortDirection : null}
+                onClick={() => this.changeSort('allegations')}
+              >
+                Allegations<br />all/pct
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            { this.renderOfficersTableData() }
+          </Table.Body>
+        </Table>
+      </Segment>
+    );
+  }
+
+  render() {
+    const { isMobile } = this.props;
+
+    if (isMobile) {
+      return this.renderContent();
+    }
+
+    return (
+      <Segment inverted className='precinct-data'>
+        { this.renderContent() }
       </Segment>
     );
   }

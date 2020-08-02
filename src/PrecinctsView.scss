@@ -1,7 +1,26 @@
+.popup-btn:after {
+  display: inline-block;
+  content: '\f0d7';
+  font-family: Icons;
+  font-style: normal;
+  font-weight: 400;
+  height: 1em;
+  width: auto;
+  margin: 0 0 0 .5em;
+}
+
+.popup-btn.open:after {
+  content: '\f0d8';
+}
+
 .map-container {
   top: 119px;
   bottom: 0;
   left: 0;
   right: 0;
   position: absolute;
+
+  @media only screen and (max-width: 767px) {
+    top: 143px;
+  }
 }

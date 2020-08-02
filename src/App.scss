@@ -4,8 +4,20 @@ body {
 
 .ui.inverted.segment {
   margin-bottom: 0;
+
+  @media only screen and (max-width: 767px) {
+    border-radius: 0
+  }
 }
 
 .ui.inverted.pointing.menu {
   margin-top: 0;
+
+  @media only screen and (max-width: 767px) {
+    border-radius: 0;
+
+    .item {
+      border-radius: 0;
+    }
+  }
 }
