@@ -18,8 +18,8 @@ class AboutModal extends React.Component {
               records</a> of civilian complaints filed against New York City police officers on July 26, 2020.
             </p>
             <p>
-              <em>NYPD Complaints</em> was a project started to complement and augment the <a href='https://projects.propublica.org/nypd-ccrb/' target='_blank' rel="noopener noreferrer">ProPublica project</a> with
-              data visualizations and query tools to let us further understand more about who the alleged abuses were coming from and the communities they affected.
+              <em>NYPD Complaints</em> was started to complement and augment the <a href='https://projects.propublica.org/nypd-ccrb/' target='_blank' rel="noopener noreferrer">ProPublica project</a> with
+              data visualizations, and query tools to let us further understand more about who the alleged abuses were coming from and the communities they affected.
             </p>
             <p>
               ProPublica obtained these records from the Civilian Complaint Review Board (CCRB). It's important to note that this data only
