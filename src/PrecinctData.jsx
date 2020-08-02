@@ -1,17 +1,33 @@
 import React from 'react';
 import { Segment, Header, Button, Icon, Grid, Statistic, Table, Divider } from 'semantic-ui-react';
 
-import { toOrdinal } from './utils/ordinals.js'
-import { commands } from './utils/searchTerms.js'
+import { toOrdinal } from './utils/ordinals';
+import { commands } from './utils/searchTerms';
+import { sortData } from './utils/dataUtils';
 
 import './PrecinctData.scss';
 
 class PrecinctData extends React.Component {
+  state = { sortColumn: 'complaints', sortDirection: 'descending'};
+
+  changeSort(column) {
+    const { sortColumn, sortDirection } = this.state;
+    const newState = { sortColumn: column, sortDirection: 'ascending'};
+
+    if (column === sortColumn) {
+      newState['sortDirection'] = sortDirection === 'ascending' ? 'descending' : 'ascending';
+    } else if (['complaints', 'allegations'].includes(column)) {
+      newState['sortDirection'] = 'descending';
+    }
+
+    this.setState(newState);
+  }
 
   renderOfficersTableData() {
     const { data } = this.props;
+    const { sortColumn, sortDirection } = this.state;
     const { officers } = data;
-    const sortedOfficers = [...officers].sort((a, b) => b.complaints.size - a.complaints.size);
+    const sortedOfficers = sortData([...officers], sortColumn, sortDirection);
 
     return sortedOfficers.map((officer) => {
       return (
@@ -37,7 +53,7 @@ class PrecinctData extends React.Component {
       filters,
       handleUnselectPrecinct,
     } = this.props;
-
+    const { sortColumn, sortDirection } = this.state;
     const {
       fromDate, toDate, categories, complainant_ethnicity, complainant_gender, mos_ethnicity, mos_gender, complainant_age_incident, board_disposition,
     } = filters;
@@ -118,15 +134,45 @@ class PrecinctData extends React.Component {
 
           </Statistic.Group>
           <Divider />
-          <Table basic='very' size='small' unstackable fixed>
+          <Table basic='very' size='small' unstackable fixed sortable compact>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Shield No.</Table.HeaderCell>
-                <Table.HeaderCell>Current Command</Table.HeaderCell>
-                <Table.HeaderCell>Current Rank</Table.HeaderCell>
-                <Table.HeaderCell>Complaints / Complaints in Pct</Table.HeaderCell>
-                <Table.HeaderCell>Allegations / Allegations in Pct</Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'name' ? sortDirection : null}
+                  onClick={() => this.changeSort('name')}
+                >
+                  Name
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'shield_no' ? sortDirection : null}
+                  onClick={() => this.changeSort('shield_no')}
+                >
+                  Shield<br />No.
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'command_now' ? sortDirection : null}
+                  onClick={() => this.changeSort('command_now')}
+                >
+                  Current<br />Command
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'rank_now' ? sortDirection : null}
+                  onClick={() => this.changeSort('rank_now')}
+                >
+                  Current<br />Rank
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'complaints' ? sortDirection : null}
+                  onClick={() => this.changeSort('complaints')}
+                >
+                  Complaints<br />all/pct
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={sortColumn === 'allegations' ? sortDirection : null}
+                  onClick={() => this.changeSort('allegations')}
+                >
+                  Allegations<br />all/pct
+                </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>

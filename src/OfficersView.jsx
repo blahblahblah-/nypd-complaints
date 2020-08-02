@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import { Grid, Segment, Table, Ref, Sticky, Dimmer, Loader, Menu, Icon } from 'semantic-ui-react';
 
 import { minDate, maxDate, commands } from './utils/searchTerms';
-import { filterData } from './utils/dataUtils';
+import { filterData, sortData } from './utils/dataUtils';
 
 import FilterPanel from './FilterPanel';
 
@@ -147,30 +147,7 @@ class OfficersView extends React.Component {
   renderRows() {
     const { officersData, page, sortColumn, sortDirection } = this.state;
     const officers = Object.keys(officersData).map((key) => officersData[key]);
-    const sortedOfficers = [...officers].sort((a, b) => {
-      let aVal = a[sortColumn];
-      let bVal = b[sortColumn];
-      let result = 0;
-
-      if (['allegations', 'complaints'].includes(sortColumn)) {
-        aVal = a[sortColumn].size;
-        bVal = b[sortColumn].size;
-      } else if (sortColumn === 'name') {
-        aVal = `${a.last_name}, ${a.first_name}`;
-        bVal = `${b.last_name}, ${b.first_name}`;
-      }
-
-      if (aVal > bVal) {
-        result = 1;
-      } else if (bVal > aVal) {
-        result = -1;
-      }
-
-      if (sortDirection === 'descending') {
-        return result * -1;
-      }
-      return result
-    }).slice((page - 1) * paginationSize, page * paginationSize - 1);
+    const sortedOfficers = sortData([...officers], sortColumn, sortDirection).slice((page - 1) * paginationSize, page * paginationSize - 1);
 
     return sortedOfficers.map((officer) => {
       return (

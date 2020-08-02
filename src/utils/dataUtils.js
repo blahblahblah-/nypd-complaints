@@ -25,4 +25,31 @@ export const filterData = (data, filters) => {
       return d.complainant_age_incident >= min && d.complainant_age_incident <= max;
     })
   })
-}
+};
+
+export const sortData = (data, sortColumn, sortDirection) => {
+  return data.sort((a, b) => {
+    let aVal = a[sortColumn];
+    let bVal = b[sortColumn];
+    let result = 0;
+
+    if (['allegations', 'complaints'].includes(sortColumn)) {
+      aVal = a[sortColumn].size;
+      bVal = b[sortColumn].size;
+    } else if (sortColumn === 'name') {
+      aVal = `${a.last_name}, ${a.first_name}`;
+      bVal = `${b.last_name}, ${b.first_name}`;
+    }
+
+    if (aVal > bVal) {
+      result = 1;
+    } else if (bVal > aVal) {
+      result = -1;
+    }
+
+    if (sortDirection === 'descending') {
+      return result * -1;
+    }
+    return result;
+  })
+};
