@@ -389,7 +389,7 @@ class PrecinctsView extends React.Component {
         }
         { selectedPrecinct &&
           <Responsive open={isMobilePopupOpen}
-            as={Popup} trigger={<Responsive as={Button} basic inverted fluid {...Responsive.onlyMobile}  className={isMobilePopupOpen ? 'open popup-btn' : 'popup-btn'} onClick={this.handleToggleMobilePopup}>{toOrdinal(selectedPrecinct)} Precinct Precinct Data</Responsive>}
+            as={Popup} trigger={<Responsive as={Button} basic inverted fluid {...Responsive.onlyMobile}  className={isMobilePopupOpen ? 'open popup-btn' : 'popup-btn'} onClick={this.handleToggleMobilePopup}>{toOrdinal(selectedPrecinct)} Precinct Data</Responsive>}
             on='click' position='bottom center' flowing inverted style={{padding: 0, height: '455px', overflowY: 'scroll'}}
           >
             <PrecinctData minWidth={Responsive.onlyTablet.minWidth} isMobile
