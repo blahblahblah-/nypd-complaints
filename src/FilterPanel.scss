@@ -1,6 +1,6 @@
 .ui.segment.filter-panel {
   position: relative !important;
-  top: 10px;
+  top: 0px;
   left: 10px;
   bottom: auto;
   padding: 10px !important;
@@ -48,8 +48,4 @@
       margin-bottom: 0;
     }
   }
-}
-
-.officers-view .ui.segment.filter-panel {
-  top: 0;
 }
