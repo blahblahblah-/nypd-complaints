@@ -198,7 +198,7 @@ class OfficersView extends React.Component {
 
     return (
       <>
-        <Responsive as={Grid} centered minWidth={Responsive.onlyTablet.minWidth}>
+        <Responsive as={Grid} centered minWidth={Responsive.onlyTablet.minWidth} className='officers-view'>
           <Grid.Column width={5}>
           <Sticky context={this.contextRef}>
             <FilterPanel filters={filters} displayProPublicaLink
@@ -295,7 +295,7 @@ class OfficersView extends React.Component {
               handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />
         </Responsive>
         <Responsive as={Segment} inverted {...Responsive.onlyMobile} className='mobile-table'>
-          <Table basic='very' size='small' unstackable fixed inverted sortable>
+          <Table basic='very' size='small' unstackable fixed inverted compact sortable>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
@@ -308,25 +308,25 @@ class OfficersView extends React.Component {
                   sorted={sortColumn === 'shield_no' ? sortDirection : null}
                   onClick={() => this.changeSort('shield_no')}
                 >
-                  Shield No.
+                  Shield<br />No.
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={sortColumn === 'command_now' ? sortDirection : null}
                   onClick={() => this.changeSort('command_now')}
                 >
-                  Current Command
+                  Current<br />Cmd
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={sortColumn === 'rank_now' ? sortDirection : null}
                   onClick={() => this.changeSort('rank_now')}
                 >
-                  Current Rank
+                  Current<br />Rank
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={sortColumn === 'complaints' ? sortDirection : null}
                   onClick={() => this.changeSort('complaints')}
                 >
-                  Complaints
+                  Compl
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={sortColumn === 'allegations' ? sortDirection : null}

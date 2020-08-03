@@ -152,7 +152,7 @@ class PrecinctData extends React.Component {
                 sorted={sortColumn === 'command_now' ? sortDirection : null}
                 onClick={() => this.changeSort('command_now')}
               >
-                Current<br />Command
+                Current<br />Cmd
               </Table.HeaderCell>
               <Table.HeaderCell
                 sorted={sortColumn === 'rank_now' ? sortDirection : null}
@@ -164,7 +164,7 @@ class PrecinctData extends React.Component {
                 sorted={sortColumn === 'complaints' ? sortDirection : null}
                 onClick={() => this.changeSort('complaints')}
               >
-                Complaints<br />all/pct
+                Compl<br />all/pct
               </Table.HeaderCell>
               <Table.HeaderCell
                 sorted={sortColumn === 'allegations' ? sortDirection : null}

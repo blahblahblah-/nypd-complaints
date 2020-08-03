@@ -304,7 +304,7 @@ class PrecinctsView extends React.Component {
       { selected: true }
     );
 
-    this.setState({ selectedPrecinct: precinct });
+    this.setState({ selectedPrecinct: precinct, isMobilePopupOpen: false });
   }
 
   debounceSelectPrecinct = debounce((precinct) => {
