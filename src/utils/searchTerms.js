@@ -629,15 +629,24 @@ export const ranks = [
 ];
 
 export const conclusions = [
-  'Substantiated (Charges)',
-  'Substantiated (Command Discipline)',
-  'Substantiated (Command Discipline A)',
-  'Substantiated (Command Discipline B)',
-  'Substantiated (Command Lvl Instructions)',
-  'Substantiated (Formalized Training)',
-  'Substantiated (Instructions)',
-  'Substantiated (MOS Unidentified)',
-  'Substantiated (No Recommendations)',
-  'Exonerated',
-  'Unsubstantiated',
+  {
+    'name': 'Substantiated',
+    'subcategories': [
+      'Charges',
+      'Command Discipline',
+      'Command Discipline A',
+      'Command Discipline B',
+      'Command Lvl Instructions',
+      'Formalized Training',
+      'Instructions',
+      'MOS Unidentified',
+      'No Recommendations',
+    ],
+  },
+  {
+    'name': 'Exonerated',
+  },
+  {
+    'name': 'Unsubstantiated',
+  }
 ];

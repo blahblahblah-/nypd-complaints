@@ -18,12 +18,11 @@ class FilterPanel extends React.Component {
         'text': c.name,
         'value': c.name
       }
-      const seconadary = c.subcategories.map((s) => {
+      const seconadary = c.subcategories.filter((s) => !filteredCategories?.includes(c.name)).map((s) => {
         return {
           'key': `${c.name}:${s}`,
           'text': `${c.name} - ${s}`,
           'value': `${c.name}:${s}`,
-          'disabled': filteredCategories?.includes(c.name), // Disable if top-level is already selected
         }
       });
       seconadary.unshift(primary);
@@ -59,6 +58,28 @@ class FilterPanel extends React.Component {
         'value': v,
       };
     });
+  }
+
+  conclusionOptions() {
+    const { filters } = this.props;
+    const filteredConclusions = filters.board_disposition;
+
+    return conclusions.flatMap((c) => {
+      const primary = {
+        'key': c.name,
+        'text': c.name,
+        'value': c.name
+      }
+      const seconadary = c?.subcategories?.filter((s) => !filteredConclusions?.includes(c.name)).map((s) => {
+        return {
+          'key': `${c.name}:${s}`,
+          'text': `${c.name} - ${s}`,
+          'value': `${c.name}:${s}`,
+        }
+      }) || [];
+      seconadary.unshift(primary);
+      return seconadary;
+    })
   }
 
   options(values) {
@@ -271,9 +292,8 @@ class FilterPanel extends React.Component {
               name='board_disposition'
               fluid
               multiple
-              search
               selection
-              options={this.options(conclusions)}
+              options={this.conclusionOptions()}
               onChange={handleFilterChange}
               value={filters.board_disposition}
             />
