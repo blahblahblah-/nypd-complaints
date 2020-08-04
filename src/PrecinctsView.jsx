@@ -330,16 +330,10 @@ class PrecinctsView extends React.Component {
     this.setState({ filters }, this.refreshMap);
   }
 
-  handleCategoryFilterChange = (e, { value }) => {
+  handleFilterChange = (e, { name, value }) => {
     const selectedPrimaries = value.filter((v) => v.indexOf(':') === -1);
     const { filters } = this.state;
-    filters.categories = value.filter((v) => !selectedPrimaries.some((t) => v.startsWith(`${t}:`)));
-    this.setState({ filters }, this.refreshMap);
-  };
-
-  handleFilterChange = (e, { name, value }) => {
-    const { filters } = this.state;
-    filters[name] = value;
+    filters[name] = value.filter((v) => v.indexOf(':') === -1 || !selectedPrimaries.some((t) => v.startsWith(`${t}:`)));
     this.setState({ filters }, this.refreshMap);
   };
 
@@ -382,7 +376,7 @@ class PrecinctsView extends React.Component {
               mode={mode} fromDate={fromDate} toDate={toDate} filters={filters}
               allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
               handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}
-              handleCategoryFilterChange={this.handleCategoryFilterChange} handleFilterChange={this.handleFilterChange}
+              handleFilterChange={this.handleFilterChange}
               handleModeClick={this.handleModeClick} handleReset={this.handleReset}
             />
           </Responsive>
@@ -406,7 +400,7 @@ class PrecinctsView extends React.Component {
             mode={mode} fromDate={fromDate} toDate={toDate} filters={filters}
             allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
             handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}
-            handleCategoryFilterChange={this.handleCategoryFilterChange} handleFilterChange={this.handleFilterChange}
+            handleFilterChange={this.handleFilterChange}
             handleModeClick={this.handleModeClick} handleReset={this.handleReset}
           />
         }

@@ -100,16 +100,10 @@ class OfficersView extends React.Component {
     this.setState({ filters }, this.refreshData);
   }
 
-  handleCategoryFilterChange = (e, { value }) => {
+  handleFilterChange = (e, { name, value }) => {
     const selectedPrimaries = value.filter((v) => v.indexOf(':') === -1);
     const { filters } = this.state;
-    filters.categories = value.filter((v) => !selectedPrimaries.some((t) => v.startsWith(`${t}:`)));
-    this.setState({ filters }, this.refreshData);
-  };
-
-  handleFilterChange = (e, { name, value }) => {
-    const { filters } = this.state;
-    filters[name] = value;
+    filters[name] = value.filter((v) => v.indexOf(':') === -1 || !selectedPrimaries.some((t) => v.startsWith(`${t}:`)));
     this.setState({ filters }, this.refreshData);
   };
 
@@ -203,7 +197,7 @@ class OfficersView extends React.Component {
           <Sticky context={this.contextRef}>
             <FilterPanel filters={filters} displayProPublicaLink
               allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
-              handleFromDateChange={this.handleFromDateChange} handleCategoryFilterChange={this.handleCategoryFilterChange}
+              handleFromDateChange={this.handleFromDateChange}
               handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />
             }
           </Sticky>
@@ -291,7 +285,7 @@ class OfficersView extends React.Component {
         >
           <FilterPanel filters={filters} displayProPublicaLink
               allegationsCount={allegationsCount} complaintsCount={complaintsCount} officersCount={officersCount}
-              handleFromDateChange={this.handleFromDateChange} handleCategoryFilterChange={this.handleCategoryFilterChange}
+              handleFromDateChange={this.handleFromDateChange}
               handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />
         </Responsive>
         <Responsive as={Segment} inverted {...Responsive.onlyMobile} className='mobile-table'>

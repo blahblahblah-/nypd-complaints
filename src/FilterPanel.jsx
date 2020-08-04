@@ -96,7 +96,7 @@ class FilterPanel extends React.Component {
     const {
       mode, filters, displayProPublicaLink,
       allegationsCount, complaintsCount, officersCount,
-      handleFromDateChange, handleToDateChange, handleModeClick, handleCategoryFilterChange, handleFilterChange, handleReset
+      handleFromDateChange, handleToDateChange, handleModeClick, handleFilterChange, handleReset
     } = this.props;
 
     return (
@@ -154,14 +154,14 @@ class FilterPanel extends React.Component {
           </Form.Group>
           <Form.Field>
             <Dropdown
-              name='category'
+              name='categories'
               placeholder='Filter by Allegation Type'
               fluid
               multiple
               search
               selection
               options={this.categoryOptions()}
-              onChange={handleCategoryFilterChange}
+              onChange={handleFilterChange}
               value={filters.categories}
             />
           </Form.Field>
