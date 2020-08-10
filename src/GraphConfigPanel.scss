@@ -1,0 +1,21 @@
+.ui.segment.graph-config-panel {
+  position: relative !important;
+  top: 0px;
+  left: 10px;
+  bottom: auto;
+  padding: 10px !important;
+  border-radius: 1rem !important;
+
+  @media only screen and (min-width: 768px) {
+    max-width: 500px;
+  }
+
+  @media only screen and (max-width: 767px) {
+    margin-right: 15px;
+    border-radius: 0!important;
+  }
+
+  .category-bars {
+    width: 100%;
+  }
+}

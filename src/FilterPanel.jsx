@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Form, Menu, Dropdown, Button, Icon } from 'semantic-ui-react';
+import { Segment, Form, Menu, Dropdown, Button, Icon, Divider, Header } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
 import { minDate, maxDate, categories, ethnicities, genders, officerGenders, ageGroups, commands, ranks, conclusions } from './utils/searchTerms';
@@ -95,12 +95,18 @@ class FilterPanel extends React.Component {
   render() {
     const {
       mode, filters, displayProPublicaLink,
-      allegationsCount, complaintsCount, officersCount,
+      allegationsCount, complaintsCount, officersCount, showHeader,
       handleFromDateChange, handleToDateChange, handleModeClick, handleFilterChange, handleReset
     } = this.props;
 
     return (
       <Segment inverted className='filter-panel'>
+        {
+          showHeader &&
+          <Divider horizontal inverted>
+            <Header size='small' inverted>Filters</Header>
+          </Divider>
+        }
         <Form inverted size='mini'>
         {
           handleModeClick &&
@@ -114,7 +120,7 @@ class FilterPanel extends React.Component {
           </Menu>
         }
         {
-          !handleModeClick &&
+          !handleModeClick && officersCount !== undefined &&
           <div className='summary'>
             <h5>Officers with Complaints: {officersCount}</h5>
             <h5>Complaints: {complaintsCount}</h5>
