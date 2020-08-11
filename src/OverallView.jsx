@@ -320,6 +320,7 @@ class OverallView extends React.Component {
             mode={mode} primaryCategory={primaryCategory} secondaryCategory={secondaryCategory}
             maxLimit={maxLimit} limit={limit}
             handleValueChange={this.handleValueChange} handleLimitChange={this.handleLimitChange}
+            handlePresetChange={this.handlePresetChange}
           />
           <FilterPanel filters={filters} showHeader
             handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}
