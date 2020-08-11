@@ -2,7 +2,10 @@ import React from 'react';
 import { Segment, Form, Menu, Dropdown, Button, Icon, Divider, Header } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
-import { minDate, maxDate, categories, ethnicities, genders, officerGenders, ageGroups, commands, ranks, conclusions } from './utils/searchTerms';
+import {
+  minDate, maxDate, categories, ethnicities, genders,
+  officerGenders, ageGroups, commands, ranks, precincts, conclusions
+} from './utils/searchTerms';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './FilterPanel.scss';
@@ -209,7 +212,7 @@ class FilterPanel extends React.Component {
           </Form.Field>
           <Form.Field>
             <Dropdown
-              placeholder='Filter by Officers Ethnicity'
+              placeholder='Filter by Officer Ethnicity'
               name='mos_ethnicity'
               fluid
               multiple
@@ -221,7 +224,7 @@ class FilterPanel extends React.Component {
           </Form.Field>
           <Form.Field>
             <Dropdown
-              placeholder='Filter by Officers Gender'
+              placeholder='Filter by Officer Gender'
               name='mos_gender'
               fluid
               multiple
@@ -235,7 +238,7 @@ class FilterPanel extends React.Component {
             filters.command_at_incident &&
             <Form.Field>
               <Dropdown
-                placeholder='Filter by Command at Incident'
+                placeholder='Filter by Officer Command at Incident'
                 name='command_at_incident'
                 fluid
                 multiple
@@ -250,7 +253,7 @@ class FilterPanel extends React.Component {
           { filters.command_now &&
             <Form.Field>
               <Dropdown
-                placeholder='Filter by Current Command'
+                placeholder='Filter by Officer Current Command'
                 name='command_now'
                 fluid
                 multiple
@@ -265,7 +268,7 @@ class FilterPanel extends React.Component {
           { filters.rank_incident &&
             <Form.Field>
               <Dropdown
-                placeholder='Filter by Rank at Incident'
+                placeholder='Filter by Officer Rank at Incident'
                 name='rank_incident'
                 fluid
                 multiple
@@ -280,7 +283,7 @@ class FilterPanel extends React.Component {
           { filters.rank_now &&
             <Form.Field>
               <Dropdown
-                placeholder='Filter by Current Rank'
+                placeholder='Filter by Officer Current Rank'
                 name='rank_now'
                 fluid
                 multiple
@@ -289,6 +292,21 @@ class FilterPanel extends React.Component {
                 options={this.options(ranks)}
                 onChange={handleFilterChange}
                 value={filters.rank_now}
+              />
+            </Form.Field>
+          }
+          { filters.precinct &&
+            <Form.Field>
+              <Dropdown
+                placeholder='Filter by Incident Precinct'
+                name='precinct'
+                fluid
+                multiple
+                search
+                selection
+                options={this.options(precincts)}
+                onChange={handleFilterChange}
+                value={filters.precinct}
               />
             </Form.Field>
           }

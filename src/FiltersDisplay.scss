@@ -1,0 +1,12 @@
+.filter-display {
+  margin-top: .5em;
+
+  h5.ui.header {
+    margin-top: 0;
+    margin-bottom: .5em;
+
+    @media only screen and (max-width: 767px) {
+      padding: 0 18px;
+    }
+  }
+}

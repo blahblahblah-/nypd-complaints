@@ -3,11 +3,12 @@ import { Grid, Responsive, Segment, Dimmer, Loader, Header, Popup, Button } from
 
 import { minDate, maxDate } from './utils/searchTerms';
 import { filterData } from './utils/dataUtils';
-import { modes, categories } from './utils/graphConfigs';
+import { modes, categories } from './utils/configs';
 
 import FilterPanel from './FilterPanel';
 import GraphConfigPanel from './GraphConfigPanel';
 import BarGraph from './BarGraph';
+import FiltersDisplay from './FiltersDisplay';
 
 import './OverallView.scss';
 
@@ -31,6 +32,7 @@ class OverallView extends React.Component {
       command_now: [],
       rank_incident: [],
       rank_now: [],
+      precinct: [],
       board_disposition: [],
     },
     allegationsCount: 0,
@@ -240,6 +242,7 @@ class OverallView extends React.Component {
         command_now: [],
         rank_incident: [],
         rank_now: [],
+        precinct: [],
         board_disposition: [],
       },
       mode: 'officers',
@@ -280,9 +283,18 @@ class OverallView extends React.Component {
               <Loader inverted></Loader>
             </Dimmer>
           }
-            <Segment style={{height: 'calc(100vh - 100px)'}}>
-              <Header as='h3'>{ modes[mode] } by { [primaryCategory, secondaryCategory].filter((c) => c).map((c) => categories[c]).join(' and ') }</Header>
-              <BarGraph mode={mode} primaryCategory={primaryCategory} secondaryCategory={secondaryCategory} graphData={graphData} secondaryKeys={secondaryKeys} />
+            <Segment>
+              <Grid>
+                <Grid.Row className='graph-header'>
+                  <Header as='h3'>{ modes[mode] } by { [primaryCategory, secondaryCategory].filter((c) => c).map((c) => categories[c]).join(' and ') }</Header>
+                </Grid.Row>
+                <Grid.Row className='graph-header'>
+                  <FiltersDisplay filters={filters} />
+                </Grid.Row>
+                <Grid.Row style={{height: 'calc(100vh - 200px)'}}>
+                  <BarGraph mode={mode} primaryCategory={primaryCategory} secondaryCategory={secondaryCategory} graphData={graphData} secondaryKeys={secondaryKeys} />
+                </Grid.Row>
+              </Grid>
             </Segment>
           </Grid.Column>
         </Responsive>
@@ -299,9 +311,18 @@ class OverallView extends React.Component {
             handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}
             handleFilterChange={this.handleFilterChange} handleReset={this.handleReset} />
         </Responsive>
-        <Responsive as={Segment} style={{height: '100vh'}} className='mobile-segment' {...Responsive.onlyMobile}>
-          <Header as='h3'>{ modes[mode] } by { [primaryCategory, secondaryCategory].filter((c) => c).map((c) => categories[c]).join(' and ') }</Header>
-          <BarGraph isMobile mode={mode} primaryCategory={primaryCategory} secondaryCategory={secondaryCategory} graphData={graphData} secondaryKeys={secondaryKeys} />
+        <Responsive as={Segment} className='mobile-segment' {...Responsive.onlyMobile}>
+          <Grid>
+            <Grid.Row className='graph-header'>
+              <Header as='h3'>{ modes[mode] } by { [primaryCategory, secondaryCategory].filter((c) => c).map((c) => categories[c]).join(' and ') }</Header>
+            </Grid.Row>
+            <Grid.Row className='graph-header'>
+              <FiltersDisplay filters={filters} />
+            </Grid.Row>
+            <Grid.Row style={{height: '100vh'}}>
+              <BarGraph isMobile mode={mode} primaryCategory={primaryCategory} secondaryCategory={secondaryCategory} graphData={graphData} secondaryKeys={secondaryKeys} />
+            </Grid.Row>
+          </Grid>
         </Responsive>
       </>
     );

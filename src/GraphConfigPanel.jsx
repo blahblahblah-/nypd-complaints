@@ -1,7 +1,7 @@
 import React from 'react';
 import { Segment, Form, Dropdown } from 'semantic-ui-react';
 
-import { modes, categories } from './utils/graphConfigs';
+import { modes, categories } from './utils/configs';
 
 import './GraphConfigPanel.scss';
 

@@ -1,8 +1,20 @@
 .ui.segment.mobile-segment {
   padding: 0;
 
+  .ui.grid {
+    width: 100%;
+  }
+
   h3 {
     padding: 1em;
     margin-bottom: 0;
+  }
+}
+
+.ui.grid .row.graph-header {
+  padding: 1em 1em 0 1em;
+
+  h3 {
+    padding-bottom: 0;
   }
 }

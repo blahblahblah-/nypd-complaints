@@ -23,3 +23,8 @@ export const categories = {
   'complaints_count': 'Number of Complaints',
   'allegations_count': 'Number of Allegations',
 }
+
+export const additionalCategories = {
+  'categories': 'Allegation Type',
+  'board_disposition': 'CCRB Conclusion',
+}

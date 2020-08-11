@@ -16,7 +16,7 @@ export const filterData = (data, filters) => {
       return d.fado_type === primary && d.allegation === secondary;
     });
   }).filter((d) => {
-    return ['complainant_ethnicity', 'complainant_gender', 'mos_ethnicity', 'mos_gender', 'command_at_incident', 'command_now', 'rank_incident', 'rank_now'].every((name) => {
+    return ['complainant_ethnicity', 'complainant_gender', 'mos_ethnicity', 'mos_gender', 'command_at_incident', 'command_now', 'rank_incident', 'rank_now', 'precinct'].every((name) => {
       return !filters[name] || filters[name].length === 0 || filters[name].includes(d[name]);
     })
   }).filter((d) => {

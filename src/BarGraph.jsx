@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 
-import { modes, categories } from './utils/graphConfigs';
+import { modes, categories } from './utils/configs';
 
 class BarGraph extends React.Component {
   getMargin() {

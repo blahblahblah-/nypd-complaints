@@ -5,6 +5,8 @@ import { toOrdinal } from './utils/ordinals';
 import { commands } from './utils/searchTerms';
 import { sortData } from './utils/dataUtils';
 
+import FiltersDisplay from './FiltersDisplay';
+
 import './PrecinctData.scss';
 
 class PrecinctData extends React.Component {
@@ -54,9 +56,6 @@ class PrecinctData extends React.Component {
       handleUnselectPrecinct,
     } = this.props;
     const { sortColumn, sortDirection } = this.state;
-    const {
-      fromDate, toDate, categories, complainant_ethnicity, complainant_gender, mos_ethnicity, mos_gender, complainant_age_incident, board_disposition,
-    } = filters;
 
     return (
       <Segment inverted={isMobile} className='inner-box'>
@@ -70,53 +69,7 @@ class PrecinctData extends React.Component {
             <Header as='h3'>{ toOrdinal(selectedPrecinct) } Precinct </Header>
           </Grid.Column>
         </Responsive>
-        <div className='filters'>
-          <Header as='h5'>
-            Period: {fromDate.getFullYear()}/{(fromDate.getMonth() + 1 + '').padStart(2, '0')} to {toDate.getFullYear()}/{(toDate.getMonth() + 1 + '').padStart(2, '0')}
-          </Header>
-          {
-            categories.length > 0 &&
-            <Header as='h5'>
-              Allegation type: { categories.map((c) => c.replace(':', ' - ')).join(', ') }
-            </Header>
-          }
-          {
-            complainant_ethnicity.length > 0 &&
-            <Header as='h5'>
-              Complainant ethnicity: { complainant_ethnicity.join(', ') }
-            </Header>
-          }
-          {
-            complainant_gender.length > 0 &&
-            <Header as='h5'>
-              Complainant gender: { complainant_gender.join(', ') }
-            </Header>
-          }
-          {
-            complainant_age_incident.length > 0 &&
-            <Header as='h5'>
-              Complainant age group: { complainant_age_incident.join(', ').replace(/:/gi, '-') }
-            </Header>
-          }
-          {
-            mos_ethnicity.length > 0 &&
-            <Header as='h5'>
-              Officer ethnicity: { mos_ethnicity.join(', ') }
-            </Header>
-          }
-          {
-            mos_gender.length > 0 &&
-            <Header as='h5'>
-              Officer gender: { mos_gender.join(', ') }
-            </Header>
-          }
-          {
-            board_disposition.length > 0 &&
-            <Header as='h5'>
-              CCRB Conclusion: { board_disposition.join(', ') }
-            </Header>
-          }
-        </div>
+        <FiltersDisplay filters={filters} />
         <Statistic.Group widths={isMobile ?  2 : 3} size='tiny' inverted={isMobile}>
           <Statistic>
             <Statistic.Value>{ data.officers.length.toLocaleString('en-US') }</Statistic.Value>

@@ -28,6 +28,7 @@ class OfficersView extends React.Component {
       command_now: [],
       rank_incident: [],
       rank_now: [],
+      precinct: [],
       board_disposition: [],
     },
     allegationsCount: 0,
@@ -122,6 +123,7 @@ class OfficersView extends React.Component {
         command_now: [],
         rank_incident: [],
         rank_now: [],
+        precinct: [],
         board_disposition: [],
       },
     }, this.refreshData);
