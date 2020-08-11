@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 
 import { minDate, maxDate } from './utils/searchTerms';
 import { filterData } from './utils/dataUtils';
-import { modes, categories } from './utils/configs';
+import { modes, categories, presets } from './utils/configs';
 
 import FilterPanel from './FilterPanel';
 import GraphConfigPanel from './GraphConfigPanel';
@@ -187,7 +187,7 @@ class OverallView extends React.Component {
       return secondaryKeys[b] - secondaryKeys[a];
     });
 
-    this.setState({ data: graphData, graphData: graphData.slice(0, 50), secondaryKeys: orderedSecondaryKeys, loaded: true, limit: Math.min(50, graphData.length), maxLimit: graphData.length});
+    this.setState({ data: graphData, graphData: graphData.slice(0, 50), secondaryKeys: orderedSecondaryKeys, loaded: true, limit: Math.min(30, graphData.length), maxLimit: graphData.length});
   }
 
   handleFromDateChange = (date) => {
@@ -227,6 +227,10 @@ class OverallView extends React.Component {
     const { data } = this.state;
     this.setState({ graphData: data.slice(0, e.target.value), limit: e.target.value });
   }
+
+  handlePresetChange = (e, { value }) => {
+    this.setState(presets[value], this.refreshData);
+  };
 
   handleReset = () => {
     this.setState({
@@ -280,6 +284,7 @@ class OverallView extends React.Component {
               mode={mode} primaryCategory={primaryCategory} secondaryCategory={secondaryCategory}
               maxLimit={maxLimit} limit={limit}
               handleValueChange={this.handleValueChange} handleLimitChange={this.handleLimitChange}
+              handlePresetChange={this.handlePresetChange}
             />
             <FilterPanel filters={filters} showHeader
               handleFromDateChange={this.handleFromDateChange} handleToDateChange={this.handleToDateChange}

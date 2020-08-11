@@ -1,8 +1,10 @@
+import { minDate, maxDate } from './searchTerms';
+
 export const modes = {
   'officers': 'Officers with Complaints',
   'complaints': 'Complaints',
   'allegations': 'Allegations',
-}
+};
 
 export const categories = {
   'fado_type': 'Allegation Type - Primary',
@@ -22,9 +24,103 @@ export const categories = {
   'rank_now': 'Officer Current Rank',
   'complaints_count': 'Number of Complaints',
   'allegations_count': 'Number of Allegations',
-}
+};
 
 export const additionalCategories = {
   'categories': 'Allegation Type',
   'board_disposition': 'CCRB Conclusion',
-}
+};
+
+export const presets = {
+  'Allegations by Complainant Ethnicity and Allegation Type - Primary': {
+    'mode': 'allegations',
+    'primaryCategory': 'complainant_ethnicity',
+    'secondaryCategory': 'fado_type',
+    'filters': {
+      'fromDate': minDate,
+      'toDate': maxDate,
+      'categories': [],
+      'complainant_ethnicity': [],
+      'complainant_gender': [],
+      'complainant_age_incident': [],
+      'mos_ethnicity': [],
+      'mos_gender': [],
+      'command_at_incident': [],
+      'command_now': [],
+      'rank_incident': [],
+      'rank_now': [],
+      'precinct': [],
+      'board_disposition': [],
+    },
+  },
+  'Allegations by Allegation Type - Secondary - Black Complainants': {
+    'mode': 'allegations',
+    'primaryCategory': 'allegation',
+    'secondaryCategory': null,
+    'filters': {
+      'fromDate': minDate,
+      'toDate': maxDate,
+      'categories': [],
+      'complainant_ethnicity': ['Black'],
+      'complainant_gender': [],
+      'complainant_age_incident': [],
+      'mos_ethnicity': [],
+      'mos_gender': [],
+      'command_at_incident': [],
+      'command_now': [],
+      'rank_incident': [],
+      'rank_now': [],
+      'precinct': [],
+      'board_disposition': [],
+    },
+  },
+  'Allegations by Allegation Type - Secondary - White Complainants': {
+    'mode': 'allegations',
+    'primaryCategory': 'allegation',
+    'secondaryCategory': null,
+    'filters': {
+      'fromDate': minDate,
+      'toDate': maxDate,
+      'categories': [],
+      'complainant_ethnicity': ['White'],
+      'complainant_gender': [],
+      'complainant_age_incident': [],
+      'mos_ethnicity': [],
+      'mos_gender': [],
+      'command_at_incident': [],
+      'command_now': [],
+      'rank_incident': [],
+      'rank_now': [],
+      'precinct': [],
+      'board_disposition': [],
+    },
+  },
+  'Allegations by Year and Complainant Ethnicity - Search/Frisk-related': {
+    'mode': 'allegations',
+    'primaryCategory': 'year_received',
+    'secondaryCategory': 'complainant_ethnicity',
+    'filters': {
+      'fromDate': minDate,
+      'toDate': maxDate,
+      'categories': [
+        'Abuse of Authority:Frisk',
+        'Abuse of Authority:Frisk and/or search',
+        'Abuse of Authority:Body cavity searches',
+        'Abuse of Authority:Person searched',
+        'Abuse of Authority:Search (of person)',
+        'Abuse of Authority:Strip-searched',
+      ],
+      'complainant_ethnicity': [],
+      'complainant_gender': [],
+      'complainant_age_incident': [],
+      'mos_ethnicity': [],
+      'mos_gender': [],
+      'command_at_incident': [],
+      'command_now': [],
+      'rank_incident': [],
+      'rank_now': [],
+      'precinct': [],
+      'board_disposition': [],
+    },
+  },
+};

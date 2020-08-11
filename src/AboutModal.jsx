@@ -25,6 +25,9 @@ class AboutModal extends React.Component {
               ProPublica obtained these records from the Civilian Complaint Review Board (CCRB). It's important to note that this data only
               includes closed cases of officers that <em>are still on the force</em>, and had <em>at least one substantiated allegation</em> against them.
             </p>
+            <p>
+              Read my <a href='https://medium.com/@_blahblahblah/visualizing-the-propublica-nypd-files-41c0ccc8a156' target='_blank' rel="noopener noreferrer">blog post</a> for further explanation of this project.
+            </p>
             <Divider />
             <p>
               Uses <a href='https://www.propublica.org/datastore/dataset/civilian-complaints-against-new-york-city-police-officers' target='_blank' rel="noopener noreferrer">

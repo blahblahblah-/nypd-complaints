@@ -1,7 +1,7 @@
 import React from 'react';
 import { Segment, Form, Dropdown } from 'semantic-ui-react';
 
-import { modes, categories } from './utils/configs';
+import { modes, categories, presets } from './utils/configs';
 
 import './GraphConfigPanel.scss';
 
@@ -19,11 +19,23 @@ class GraphConfigPanel extends React.Component {
   }
 
   render() {
-    const { mode, primaryCategory, secondaryCategory, handleValueChange, handleLimitChange, limit, maxLimit } = this.props;
+    const { mode, primaryCategory, secondaryCategory, handleValueChange, handleLimitChange, handlePresetChange, limit, maxLimit } = this.props;
 
     return (
       <Segment inverted className='graph-config-panel'>
         <Form inverted size='mini'>
+          <Form.Field>
+            <Dropdown
+              button
+              item
+              text='Presets'>
+              <Dropdown.Menu>
+                {
+                  Object.keys(presets).map((p) => (<Dropdown.Item key={p} text={p} value={p} onClick={handlePresetChange} />))
+                }
+              </Dropdown.Menu>
+          </Dropdown>
+          </Form.Field>
           <Form.Field>
             <label>y-axis values</label>
             <Dropdown
