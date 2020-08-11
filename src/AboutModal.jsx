@@ -13,7 +13,7 @@ class AboutModal extends React.Component {
         <Modal.Content>
           <Modal.Description>
             <p>
-              Shortly after 50-a—the statue in New York state shielding police disciplinary records from the public, was repealed,
+              Shortly after 50-a—the statute in New York state shielding police disciplinary records from the public, was repealed,
               ProPublica <a href='https://www.propublica.org/article/nypd-civilian-complaint-review-board-editors-note' target='_blank' rel="noopener noreferrer">published over 12,000
               records</a> of civilian complaints filed against New York City police officers on July 26, 2020.
             </p>
