@@ -2,7 +2,7 @@
 
 A frontend-only React app, providing visualization of civilian complaints against New York City police officers as provided by ProPublica.
 
-Project was started with using [Create React App](https://create-react-app.dev/docs/getting-started/). Uses [Mapbox](https://www.mapbox.com) for maps, [Semantic UI React](https://react.semantic-ui.com/) for UI elements.
+Project was started with using [Create React App](https://create-react-app.dev/docs/getting-started/). Uses [Mapbox](https://www.mapbox.com) for maps, [Nivo](https://nivo.rocks/) for graphs, [Semantic UI React](https://react.semantic-ui.com/) for UI elements.
 
 See it live at https://www.nypdcomplaints.com.
 
