@@ -39,7 +39,7 @@ class BarGraph extends React.Component {
           legendOffset: isMobile ? -40 : -60,
           tickRotation: isMobile ? -50 : 0,
           legendPosition: 'middle',
-          legend: modes[mode],
+          legend: isMobile ? "" : modes[mode],
         }}
         legends={secondaryCategory && (!isMobile || secondaryKeys.length <= 11) ? [
           {
