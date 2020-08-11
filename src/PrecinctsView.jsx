@@ -1,6 +1,7 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { debounce } from 'lodash';
+import { Helmet } from "react-helmet";
 
 import { Responsive, Button, Popup } from 'semantic-ui-react';
 
@@ -375,6 +376,14 @@ class PrecinctsView extends React.Component {
     } = this.state;
     return (
       <>
+        <Helmet>
+          <title>NYPD Complaints - Precinct Map View</title>
+          <meta property="og:url" content="https://www.nypdcomplaints.com" />
+          <meta name="twitter:url" content="https://www.nypdcomplaints.com" />
+          <link rel="canonical" href="https://www.nypdcomplaints.com" />
+          <meta property="og:title" content="NYPD Complaints - Precinct Map View" />
+          <meta name="twitter:title" content="NYPD Complaints - Precinct Map View" />
+        </Helmet>
         { !selectedPrecinct &&
           <Responsive open={isMobilePopupOpen}
             as={Popup} trigger={<Responsive as={Button} basic inverted fluid {...Responsive.onlyMobile} className={isMobilePopupOpen ? 'open popup-btn' : 'popup-btn'} onClick={this.handleToggleMobilePopup}>Filters</Responsive>}

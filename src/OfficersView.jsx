@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import { Grid, Segment, Table, Ref, Sticky, Dimmer, Loader, Menu, Icon, Responsive, Button, Popup } from 'semantic-ui-react';
+import { Helmet } from "react-helmet";
 
 import { minDate, maxDate, commands } from './utils/searchTerms';
 import { filterData, sortData } from './utils/dataUtils';
@@ -194,6 +195,14 @@ class OfficersView extends React.Component {
 
     return (
       <>
+        <Helmet>
+          <title>NYPD Complaints - Officers View</title>
+          <meta property="og:url" content="https://www.nypdcomplaints.com/officers" />
+          <meta name="twitter:url" content="https://www.nypdcomplaints.com/officers" />
+          <link rel="canonical" href="https://www.nypdcomplaints.com/officers" />
+          <meta property="og:title" content="NYPD Complaints - Officers View" />
+          <meta name="twitter:title" content="NYPD Complaints - Officers View" />
+        </Helmet>
         <Responsive as={Grid} centered minWidth={Responsive.onlyTablet.minWidth} className='officers-view'>
           <Grid.Column width={5}>
           <Sticky context={this.contextRef}>

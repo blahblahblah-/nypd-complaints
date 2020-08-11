@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Responsive, Segment, Dimmer, Loader, Header, Popup, Button } from 'semantic-ui-react';
+import { Helmet } from "react-helmet";
 
 import { minDate, maxDate } from './utils/searchTerms';
 import { filterData } from './utils/dataUtils';
@@ -265,6 +266,14 @@ class OverallView extends React.Component {
 
     return (
       <>
+        <Helmet>
+          <title>NYPD Complaints - Overall Graph View</title>
+          <meta property="og:url" content="https://www.nypdcomplaints.com/overall" />
+          <meta name="twitter:url" content="https://www.nypdcomplaints.com/overall" />
+          <link rel="canonical" href="https://www.nypdcomplaints.com/overall" />
+          <meta property="og:title" content="NYPD Complaints - Overall Graph View" />
+          <meta name="twitter:title" content="NYPD Complaints - Overall Graph View" />
+        </Helmet>
         <Responsive as={Grid} centered minWidth={Responsive.onlyTablet.minWidth} className='officers-view'>
           <Grid.Column width={5}>
             <GraphConfigPanel

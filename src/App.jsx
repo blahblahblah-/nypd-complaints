@@ -1,5 +1,6 @@
 import React from 'react';
 import { Segment, Header, Menu, Icon, Dimmer, Loader, Responsive } from 'semantic-ui-react';
+import { BrowserRouter as Router, Switch, Route, Redirect, NavLink } from "react-router-dom";
 
 import AboutModal from './AboutModal';
 import PrecinctsView from './PrecinctsView';
@@ -9,9 +10,7 @@ import OverallView from './OverallView';
 import './App.scss';
 
 class App extends React.Component {
-  state = { activeItem: 'precincts', isDataLoaded: false };
-
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  state = { isDataLoaded: false };
 
   componentDidMount() {
     import('./data/allegations.json')
@@ -24,33 +23,31 @@ class App extends React.Component {
   }
 
   renderMenu() {
-    const { activeItem } = this.state
-
     return (
       <Menu inverted pointing>
-        <Menu.Item
+        <Menu.Item as={NavLink}
+          exact
+          to='/'
           name='precincts'
-          active={activeItem === 'precincts'}
           onClick={this.handleItemClick}
          />
-        <Menu.Item
+        <Menu.Item as={NavLink}
+          to='/officers'
           name='officers'
-          active={activeItem === 'officers'}
           onClick={this.handleItemClick}
          />
-        <Menu.Item
+        <Menu.Item as={NavLink}
+          to='/overall'
           name='overall'
-          active={activeItem === 'overall'}
-          onClick={this.handleItemClick}
          />
       </Menu>
     );
   }
 
   render() {
-    const { activeItem, data, isDataLoaded } = this.state;
+    const { data, isDataLoaded } = this.state;
     return (
-      <div>
+      <Router>
         <Responsive as={Segment} inverted minWidth={Responsive.onlyTablet.minWidth}>
           <Header as='h1' color='blue' inverted>
             NYPD Complaints
@@ -72,18 +69,16 @@ class App extends React.Component {
             <Loader inverted></Loader>
           </Dimmer>
         }
-        { activeItem === 'precincts' && 
-          <PrecinctsView isDataLoaded={isDataLoaded} data={data} />
-        }
         {
-          activeItem === 'officers' &&
-          <OfficersView isDataLoaded={isDataLoaded} data={data} />
+          isDataLoaded &&
+          <Switch>
+            <Route path="/officers" render={() => (<OfficersView isDataLoaded={isDataLoaded} data={data} />)} />
+            <Route path="/overall" render={() => (<OverallView isDataLoaded={isDataLoaded} data={data} />)} />
+            <Route exact path="/" render={() => (<PrecinctsView isDataLoaded={isDataLoaded} data={data} />)} />
+            <Redirect to="/" />
+          </Switch>
         }
-        {
-          activeItem === 'overall' &&
-          <OverallView isDataLoaded={isDataLoaded} data={data} />
-        }
-      </div>
+      </Router>
     );
   }
 }
