@@ -197,7 +197,7 @@ export const presets = {
       'complainant_ethnicity': [],
       'complainant_gender': [],
       'complainant_age_incident': [],
-      'mos_ethnicity': ['Black'],
+      'mos_ethnicity': [],
       'mos_gender': [],
       'command_at_incident': [],
       'command_now': [],

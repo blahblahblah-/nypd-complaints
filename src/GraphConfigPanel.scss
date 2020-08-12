@@ -13,6 +13,12 @@
   @media only screen and (max-width: 767px) {
     margin-right: 15px;
     border-radius: 0!important;
+
+    .button.item.dropdown .menu .item .text {
+      display: inline-block;
+      width: 80vw;
+      white-space: normal;
+    }
   }
 
   .category-bars {
