@@ -229,7 +229,7 @@ class OverallView extends React.Component {
   }
 
   handlePresetChange = (e, { value }) => {
-    this.setState(presets[value], this.refreshData);
+    this.setState({ isMobilePopupOpen: false, ...presets[value]}, this.refreshData);
   };
 
   handleReset = () => {
