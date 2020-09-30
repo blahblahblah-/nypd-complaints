@@ -159,9 +159,9 @@ class OverallView extends React.Component {
     }
 
     const graphData = Object.keys(countedData).sort((a, b) => {
-      if (['year_received','complaints_count', 'allegations_count'].includes(primaryCategory)) {
+      if (['complaints_count', 'allegations_count'].includes(primaryCategory)) {
         return b - a;
-      } else if (primaryCategory === 'complainant_age_incident') {
+      } else if (['year_received', 'complainant_age_incident'].includes(primaryCategory)) {
         return a - b;
       }
       return Object.keys(countedData[b]).map((k) => countedData[b][k].size).reduce((acc, cur) => acc + cur) - Object.keys(countedData[a]).map((k) => countedData[a][k].size).reduce((acc, cur) => acc + cur);
@@ -179,9 +179,9 @@ class OverallView extends React.Component {
     });
 
     const orderedSecondaryKeys = Object.keys(secondaryKeys).sort((a, b) => {
-      if (['year_received','complaints_count', 'allegations_count'].includes(secondaryCategory)) {
+      if (['complaints_count', 'allegations_count'].includes(secondaryCategory)) {
         return b - a;
-      } else if (secondaryCategory === 'complainant_age_incident') {
+      } else if (['complainant_age_incident', 'year_received'].includes(secondaryCategory)) {
         return a - b;
       }
       return secondaryKeys[b] - secondaryKeys[a];
