@@ -10,10 +10,6 @@ import {
 import 'react-datepicker/dist/react-datepicker.css';
 import './FilterPanel.scss';
 
-const ReadonlyInput = ({ name, value, onClick }) => (
-  <input name={name} onClick={onClick} value={value} readonly={true} />
-);
-
 class FilterPanel extends React.Component {
   categoryOptions() {
     const { filters } = this.props;
@@ -145,8 +141,8 @@ class FilterPanel extends React.Component {
                 selectsStart
                 showYearDropdown
                 showMonthYearPicker
+                disabledKeyboardNavigation
                 dateFormat="yyyy/MM"
-                customInput={<ReadonlyInput />}
               />
             </Form.Field>
             <Form.Field className='to'>
@@ -162,8 +158,8 @@ class FilterPanel extends React.Component {
                 selectsEnd
                 showYearDropdown
                 showMonthYearPicker
+                disabledKeyboardNavigation
                 dateFormat="yyyy/MM"
-                customInput={<ReadonlyInput />}
               />
             </Form.Field>
           </Form.Group>
