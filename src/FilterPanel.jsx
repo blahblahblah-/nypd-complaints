@@ -141,7 +141,6 @@ class FilterPanel extends React.Component {
                 selectsStart
                 showYearDropdown
                 showMonthYearPicker
-                disabledKeyboardNavigation
                 dateFormat="yyyy/MM"
               />
             </Form.Field>
@@ -158,7 +157,6 @@ class FilterPanel extends React.Component {
                 selectsEnd
                 showYearDropdown
                 showMonthYearPicker
-                disabledKeyboardNavigation
                 dateFormat="yyyy/MM"
               />
             </Form.Field>
