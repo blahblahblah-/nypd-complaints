@@ -11,7 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './FilterPanel.scss';
 
 const ReadonlyInput = ({ name, value, onClick }) => (
-  <input name={name} onClick={onClick} value={value} readOnly />
+  <input name={name} onClick={onClick} value={value} readonly={true} />
 );
 
 class FilterPanel extends React.Component {
