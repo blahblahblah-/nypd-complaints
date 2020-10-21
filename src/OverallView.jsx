@@ -224,7 +224,12 @@ class OverallView extends React.Component {
   };
 
   handleLimitChange = (e) => {
-    const { data } = this.state;
+    const { data, primaryCategory } = this.state;
+
+    if (primaryCategory === 'year_received') {
+      this.setState({ graphData: data.slice(data.length - e.target.value), limit: e.target.value });
+      return;
+    }
     this.setState({ graphData: data.slice(0, e.target.value), limit: e.target.value });
   }
 
